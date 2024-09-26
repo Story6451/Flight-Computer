@@ -1,4 +1,11 @@
 #include <Arduino.h>
+#include <DataLogging.h>
+#include <DataReading.h>
+#include <DataTransmitting.h>
+
+DataLogging dataLogger;
+DataReading dataReader;
+DataTransmitting dataTransmitter;
 
 void setup() 
 {
