@@ -77,7 +77,6 @@ void loop()
 
   counter++;	//Count sended messages
 
-  delay(5000);
 }
 };
 
