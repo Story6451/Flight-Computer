@@ -1,19 +1,10 @@
-#include <Arduino.h>
-
-class DataTransmitting
-{
-private:
-    /* data */
-public:
- 
-    DataTransmitting(/* args */);
-
 /**
  **************************************************
  *
- * @file        LoRaSender.ino
- * @brief       This example shows how to use LoRa to send packets
- *				to another LoRa module which is set as receiver
+ * @file        LoRaReceiverCallback.ino
+ * @brief       This example shows how to use LoRa to receive packets
+ *				by using callback from another LoRa module which is 
+ *				set as sender
  *              
  *
  *
@@ -41,18 +32,20 @@ public:
 #include <SPI.h>
 #include "LoRa-SOLDERED.h"
 
+#ifdef ARDUINO_SAMD_MKRWAN1300
+#error "This example is not compatible with the Arduino MKR WAN 1300 board!"
+#endif
+
 const int csPin = 10;          // LoRa radio chip select
 const int resetPin = 4;       // LoRa radio reset
 const int irqPin = 2;         // Change for your board; must be a hardware interrupt pin
-
-int counter = 0;
 
 void setup()
 {
   Serial.begin(9600);  //Initialize serial communication with PC
   while (!Serial);
 
-  Serial.println("LoRa Sender");
+  Serial.println("LoRa Receiver Callback");
   
     // Override the default CS, reset, and IRQ pins (optional)
   LoRa.setPins(csPin, resetPin, irqPin);// set CS, reset, IRQ pin
@@ -62,21 +55,34 @@ void setup()
     Serial.println("Starting LoRa failed!");
     while (1);
   }
+
+  // Uncomment the next line to disable the default AGC and set LNA gain, values between 1 - 6 are supported
+  // LoRa.setGain(6);
+  
+  // Register the receive callback
+  LoRa.onReceive(onReceive);
+
+  // Put the radio into receive mode
+  LoRa.receive();
 }
 
 void loop()
 {
-  Serial.print("Sending packet: ");
-  Serial.println(counter);
-
-  // Send packet
-  LoRa.beginPacket(); //Begin sending
-  LoRa.print("hello ");	//Send payload
-  LoRa.print(counter);	//Send payload
-  LoRa.endPacket(); //End sending
-
-  counter++;	//Count sended messages
-
+  // Do nothing
 }
-};
 
+void onReceive(int packetSize)
+{
+  // Received a packet
+  Serial.print("Received packet '");
+
+  // Read packet
+  for (int i = 0; i < packetSize; i++)
+  {
+    Serial.print((char)LoRa.read());
+  }
+
+  // Print RSSI of packet
+  Serial.print("' with RSSI ");
+  Serial.println(LoRa.packetRssi());
+}

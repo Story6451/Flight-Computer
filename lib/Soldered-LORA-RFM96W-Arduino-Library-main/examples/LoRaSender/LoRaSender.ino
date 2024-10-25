@@ -1,13 +1,3 @@
-#include <Arduino.h>
-
-class DataTransmitting
-{
-private:
-    /* data */
-public:
- 
-    DataTransmitting(/* args */);
-
 /**
  **************************************************
  *
@@ -77,6 +67,5 @@ void loop()
 
   counter++;	//Count sended messages
 
+  delay(5000);
 }
-};
-
