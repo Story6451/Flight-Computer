@@ -41,20 +41,12 @@ void DataReading::ReadMagnetometer()
 
 
 /*
-Calibration values; the default values of +/-32767 for each axis
-lead to an assumed magnetometer bias of 0. Use the Calibrate example
-program to determine appropriate values for your particular unit.
+
+atan(y/x) if x > 0
+π/2 if x = 0 and y > 0
+−π/2 if x = 0 and y < 0
+atan(y/x) + π if x < 0 and y ≥ 0
+atan(y/x) − π if x < 0 and y < 0
+
+
 */
-//LIS3MDL::vector<int16_t> m_min = {-32767, -32767, -32767};
-//LIS3MDL::vector<int16_t> m_max = {+32767, +32767, +32767};
-
-void setup() {
-
-
-
-}
-
-void loop() {
-
-
-}
