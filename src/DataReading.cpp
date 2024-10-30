@@ -13,8 +13,21 @@ DataReading::DataReading()
     Serial.println("Failed to autodetect pressure sensor!");
     while (1);
   }
-
   ps.enableDefault();
+
+  if (!mag.init()) 
+  {
+    Serial.println("Failed to detect and initialize LIS3MDL magnetometer!");
+    
+  }
+  mag.enableDefault();
+
+  if (!imu.init()) 
+  {
+      Serial.println("Failed to detect and initialize LSM6 IMU!");
+      
+  }
+  imu.enableDefault();
 
   altitudeCalibration();
 
@@ -22,7 +35,7 @@ DataReading::DataReading()
     
 }
 
-void DataReading::altitudeCalibration()
+void DataReading::AltitudeCalibration()
 {
     float altitudeSum = 0;
 
@@ -35,37 +48,21 @@ void DataReading::altitudeCalibration()
   altitudeOffset = altitudeSum / ITER_NO;
 }
 
-
-if (!mag.init()) 
-{
-    Serial.println("Failed to detect and initialize LIS3MDL magnetometer!");
-    
-}
-mag.enableDefault();
-
-if (!imu.init()) 
-{
-    Serial.println("Failed to detect and initialize LSM6 IMU!");
-    
-}
-imu.enableDefault();
-}
-
 void DataReading::ReadMagnetometer()
 {
-    mag.read();
-    MagnetometerXValue = mag.m.x;
-    MagnetometerYValue = mag.m.y;
-    MagnetometerXValue = mag.m.z;
+  mag.read();
+  MagnetometerXValue = mag.m.x;
+  MagnetometerYValue = mag.m.y;
+  MagnetometerXValue = mag.m.z;
 
-    // Output raw x, y, z values for magnetometer
-    Serial.println("MAGNETOMETER READINGS");
-    Serial.print("Magnetometer: X=");
-    Serial.print(MagnetometerXValue);
-    Serial.print(" Y=");
-    Serial.print(MagnetometerYValue);
-    Serial.print(" Z=");
-    Serial.println(MagnetometerXValue);
+  // Output raw x, y, z values for magnetometer
+  Serial.println("MAGNETOMETER READINGS");
+  Serial.print("Magnetometer: X=");
+  Serial.print(MagnetometerXValue);
+  Serial.print(" Y=");
+  Serial.print(MagnetometerYValue);
+  Serial.print(" Z=");
+  Serial.println(MagnetometerXValue);
 }
 
 

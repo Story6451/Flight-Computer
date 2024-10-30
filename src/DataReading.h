@@ -11,7 +11,8 @@ private:
     float pressure = 0.0, altitude = 0.0, temperature = 0.0, altitudeOffset = 0.0;
 public:
     DataReading(/* args */); 
-    void altitudeCalibration();
-    void printAltitude();
+    void AltitudeCalibration();
+    void PrintAltitude();
+    void ReadMagnetometer();
 };
 
