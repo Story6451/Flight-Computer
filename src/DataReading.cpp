@@ -29,7 +29,7 @@ DataReading::DataReading()
   }
   imu.enableDefault();
 
-  altitudeCalibration();
+  AltitudeCalibration();
 
   Serial.println("Calibration complete");
     
