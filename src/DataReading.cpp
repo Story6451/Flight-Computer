@@ -36,19 +36,19 @@ void DataReading::altitudeCalibration()
 }
 
 
-    if (!mag.init()) 
-    {
-        Serial.println("Failed to detect and initialize LIS3MDL magnetometer!");
-        
-    }
-    mag.enableDefault();
+if (!mag.init()) 
+{
+    Serial.println("Failed to detect and initialize LIS3MDL magnetometer!");
+    
+}
+mag.enableDefault();
 
-    if (!imu.init()) 
-    {
-        Serial.println("Failed to detect and initialize LSM6 IMU!");
-        
-    }
-    imu.enableDefault();
+if (!imu.init()) 
+{
+    Serial.println("Failed to detect and initialize LSM6 IMU!");
+    
+}
+imu.enableDefault();
 }
 
 void DataReading::ReadMagnetometer()
