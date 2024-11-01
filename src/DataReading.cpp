@@ -37,9 +37,10 @@ DataReading::DataReading()
 
 void DataReading::AltitudeCalibration()
 {
-    float altitudeSum = 0;
+  float altitudeSum = 0;
 
-  for (altIter = 0; altIter < ITER_NO; altIter++){
+  for (altIter = 0; altIter < ITER_NO; altIter++)
+  {
     pressure = ps.readPressureMillibars();
     altitude = ps.pressureToAltitudeMeters(pressure);
     altitudeSum += altitude;
