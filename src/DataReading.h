@@ -8,7 +8,13 @@ private:
     LPS ps;
     const int ITER_NO = 1000;
     int altIter;
-    float pressure = 0.0, altitude = 0.0, temperature = 0.0, altitudeOffset = 0.0;
+    float pressure = 0.0; 
+    float altitude = 0.0; 
+    float temperature = 0.0;
+    float altitudeOffset = 0.0;
+    float MagnetometerXValue = 0.0;
+    float MagnetometerYValue = 0.0;
+    float MagnetometerZValue = 0.0;
 public:
     DataReading(/* args */); 
     void AltitudeCalibration();
