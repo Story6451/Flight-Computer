@@ -1,14 +1,3 @@
-#include <Arduino.h>
-
-class DataTransmitting
-{
-private:
-    /* data */
-public:
- 
-    DataTransmitting(/* args */);
-
-
 /**
  **************************************************
  *
@@ -37,7 +26,7 @@ public:
 /// This is pinout for Dasduino Core, if you are using other MCU, use SPI pins
 ///and Interrupt pin 0, if Dasduino ConnectPlus is used
 /// (or any other ESP32 board) use pins(SS=27, RST=2, DIO0=32, MISO=33, MOSI=25,SCK=26)
-/*
+
 #define LORA		//Specify that module will be used for LoRa to LoRa communication
 #include <SPI.h>
 #include "LoRa-SOLDERED.h"
@@ -78,7 +67,5 @@ void loop()
 
   counter++;	//Count sended messages
 
+  delay(5000);
 }
-*/
-};
-

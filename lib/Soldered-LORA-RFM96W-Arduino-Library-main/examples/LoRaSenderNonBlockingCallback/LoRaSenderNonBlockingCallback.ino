@@ -1,20 +1,11 @@
-#include <Arduino.h>
-
-class DataTransmitting
-{
-private:
-    /* data */
-public:
- 
-    DataTransmitting(/* args */);
-
-
 /**
  **************************************************
  *
- * @file        LoRaSender.ino
+ * @file        LoRaSenderNonBlockingCallback.ino
  * @brief       This example shows how to use LoRa to send packets
  *				to another LoRa module which is set as receiver
+ *				using non blocking functions and callback is called
+ *				every time LoRa has finished transmiting packet
  *              
  *
  *
@@ -37,7 +28,7 @@ public:
 /// This is pinout for Dasduino Core, if you are using other MCU, use SPI pins
 ///and Interrupt pin 0, if Dasduino ConnectPlus is used
 /// (or any other ESP32 board) use pins(SS=27, RST=2, DIO0=32, MISO=33, MOSI=25,SCK=26)
-/*
+
 #define LORA		//Specify that module will be used for LoRa to LoRa communication
 #include <SPI.h>
 #include "LoRa-SOLDERED.h"
@@ -53,7 +44,7 @@ void setup()
   Serial.begin(9600);  //Initialize serial communication with PC
   while (!Serial);
 
-  Serial.println("LoRa Sender");
+  Serial.println("LoRa Sender non-blocking Callback");
   
     // Override the default CS, reset, and IRQ pins (optional)
   LoRa.setPins(csPin, resetPin, irqPin);// set CS, reset, IRQ pin
@@ -63,22 +54,41 @@ void setup()
     Serial.println("Starting LoRa failed!");
     while (1);
   }
+
+  LoRa.onTxDone(onTxDone);	//Set callback on transmission done
 }
 
 void loop()
 {
-  Serial.print("Sending packet: ");
-  Serial.println(counter);
+  if (runEvery(5000))
+  { // Repeat every 5000 millis
 
-  // Send packet
+    Serial.print("Sending packet non-blocking: ");
+    Serial.println(counter);
+
+    // Send in async / non-blocking mode
   LoRa.beginPacket(); //Begin sending
   LoRa.print("hello ");	//Send payload
   LoRa.print(counter);	//Send payload
-  LoRa.endPacket(); //End sending
+    LoRa.endPacket(true); //End sending, true = async / non-blocking mode
 
-  counter++;	//Count sended messages
-
+    counter++;
+  }
 }
-*/
-};
 
+void onTxDone() //Callback on transmission done
+{
+  Serial.println("TxDone");
+}
+
+boolean runEvery(unsigned long interval) //If interval milliseconds has past from last run, run again
+{
+  static unsigned long previousMillis = 0;
+  unsigned long currentMillis = millis();
+  if (currentMillis - previousMillis >= interval)
+  {
+    previousMillis = currentMillis;
+    return true;
+  }
+  return false;
+}

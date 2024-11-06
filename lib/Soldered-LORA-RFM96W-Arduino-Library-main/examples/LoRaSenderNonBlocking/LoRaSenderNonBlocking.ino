@@ -1,20 +1,10 @@
-#include <Arduino.h>
-
-class DataTransmitting
-{
-private:
-    /* data */
-public:
- 
-    DataTransmitting(/* args */);
-
-
 /**
  **************************************************
  *
- * @file        LoRaSender.ino
+ * @file        LoRaSenderNonBlocking.ino
  * @brief       This example shows how to use LoRa to send packets
  *				to another LoRa module which is set as receiver
+ *				using non blocking functions
  *              
  *
  *
@@ -37,7 +27,7 @@ public:
 /// This is pinout for Dasduino Core, if you are using other MCU, use SPI pins
 ///and Interrupt pin 0, if Dasduino ConnectPlus is used
 /// (or any other ESP32 board) use pins(SS=27, RST=2, DIO0=32, MISO=33, MOSI=25,SCK=26)
-/*
+
 #define LORA		//Specify that module will be used for LoRa to LoRa communication
 #include <SPI.h>
 #include "LoRa-SOLDERED.h"
@@ -48,12 +38,11 @@ const int irqPin = 2;         // Change for your board; must be a hardware inter
 
 int counter = 0;
 
-void setup()
-{
+void setup() {
   Serial.begin(9600);  //Initialize serial communication with PC
   while (!Serial);
 
-  Serial.println("LoRa Sender");
+  Serial.println("LoRa Sender non-blocking");
   
     // Override the default CS, reset, and IRQ pins (optional)
   LoRa.setPins(csPin, resetPin, irqPin);// set CS, reset, IRQ pin
@@ -65,20 +54,22 @@ void setup()
   }
 }
 
-void loop()
-{
-  Serial.print("Sending packet: ");
+void loop() {
+  // Wait until the radio is ready to send a packet
+  while (LoRa.beginPacket() == 0)
+  {
+    Serial.print("waiting for radio ... ");
+    delay(100);
+  }
+
+  Serial.print("Sending packet non-blocking: ");
   Serial.println(counter);
 
-  // Send packet
+  // Send in async / Non-blocking mode
   LoRa.beginPacket(); //Begin sending
   LoRa.print("hello ");	//Send payload
   LoRa.print(counter);	//Send payload
-  LoRa.endPacket(); //End sending
+  LoRa.endPacket(true); //End sending, true = async / non-blocking mode
 
-  counter++;	//Count sended messages
-
+  counter++;
 }
-*/
-};
-
