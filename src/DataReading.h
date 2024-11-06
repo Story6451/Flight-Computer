@@ -28,5 +28,6 @@ public:
     void AltitudeCalibration();
     void ReadAccelerometer();
     void ReadMagnetometer();
+    void CalculateHeading();
 };
 
