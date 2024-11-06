@@ -4,8 +4,10 @@ class DataLogging
 {
 private:
     /* data */
+    const int chipSelect = 10;
     
 public:
     DataLogging(/* args */);
+    void LogData();
 };
 
