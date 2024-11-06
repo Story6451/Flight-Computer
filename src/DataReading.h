@@ -29,5 +29,6 @@ public:
     void PrintAltitude();
     void ReadAccelerometer();
     void ReadMagnetometer();
+    void CalculateHeading();
 };
 
