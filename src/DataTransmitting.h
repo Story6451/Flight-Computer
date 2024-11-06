@@ -13,10 +13,10 @@ private:
     uint32_t pressure = 10000;
     uint16_t temperature = 100;
     std::vector<int16_t> acceleration = { 2, -1, 4 };
-    uint32_t magneticFluxDensity = 100;
+    std::vector<uint32_t> magneticFluxDensity = { 10, 50, 20 }; // Magnetometer value * 100
     std::vector<int16_t> rotation = { 0, 1, -4 };
     std::vector<int16_t> gpsCoordinates = { 200, 100 };
-    int16_t velocity = -2;
+    int16_t velocity = -2; // Velocity value * 100
     uint16_t altitude = 2000;
 public:
     // creating the packet and adds the start byte to it

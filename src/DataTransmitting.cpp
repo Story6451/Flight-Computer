@@ -24,8 +24,9 @@ DataTransmitting::DataTransmitting()
     for (int16_t value : acceleration){
         Parse16Bit(packet, value);
     }
-
-    Parse32Bit(packet, magneticFluxDensity);
+    for (int16_t value : magneticFluxDensity){
+        Parse32Bit(packet, value);
+    }
 
     for (int16_t value : rotation){
         Parse16Bit(packet, value);
