@@ -15,10 +15,19 @@ private:
     float MagnetometerXValue = 0.0;
     float MagnetometerYValue = 0.0;
     float MagnetometerZValue = 0.0;
+    float AccelXValue = 0.0;
+    float AccelYValue = 0.0;
+    float AccelZValue = 0.0;
+    float MagnetometerPitch = 0.0;
+    float MagnetometerRoll = 0.0;
+    float MagnetometerXCalculated = 0.0;
+    float MagnetometerYCalculated = 0.0;
+    float UncalibratedHeading = 0.0;
 public:
     DataReading(/* args */); 
     void AltitudeCalibration();
     void PrintAltitude();
+    void ReadAccelerometer();
     void ReadMagnetometer();
 };
 

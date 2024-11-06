@@ -49,13 +49,23 @@ void DataReading::AltitudeCalibration()
   altitudeOffset = altitudeSum / ITER_NO;
 }
 
+void DataReading::ReadAccelerometer()
+{
+  AccelXValue = imu.a.x;
+  AccelYValue = imu.a.y;
+  AccelZValue = imu.a.z;
+}
 void DataReading::ReadMagnetometer()
 {
   mag.read();
   MagnetometerXValue = mag.m.x;
   MagnetometerYValue = mag.m.y;
-  MagnetometerXValue = mag.m.z;
-
+  MagnetometerZValue = mag.m.z;
+  MagnetometerPitch = atan(AccelXValue / sqrt(pow(AccelYValue,2)+pow(AccelZValue,2)));
+  MagnetometerRoll = atan(-AccelYValue / AccelZValue);
+  MagnetometerXCalculated = (MagnetometerXValue * cos(MagnetometerPitch)) + (MagnetometerZValue * sin(MagnetometerPitch));
+  MagnetometerYCalculated = ((MagnetometerXValue * sin(MagnetometerPitch) * sin(MagnetometerRoll)) + (MagnetometerYValue * cos(MagnetometerRoll)) - (MagnetometerZValue * sin(MagnetometerRoll) * cos(MagnetometerPitch)));
+  UncalibratedHeading = atan(MagnetometerYCalculated / MagnetometerXCalculated);
   // Output raw x, y, z values for magnetometer
   Serial.println("MAGNETOMETER READINGS");
   Serial.print("Magnetometer: X=");
@@ -63,17 +73,9 @@ void DataReading::ReadMagnetometer()
   Serial.print(" Y=");
   Serial.print(MagnetometerYValue);
   Serial.print(" Z=");
-  Serial.println(MagnetometerXValue);
+  Serial.println(MagnetometerZValue);
+  Serial.print("Uncalibrated Heading:");
+  Serial.println(UncalibratedHeading);
 }
 
 
-/*
-
-atan(y/x) if x > 0
-π/2 if x = 0 and y > 0
-−π/2 if x = 0 and y < 0
-atan(y/x) + π if x < 0 and y ≥ 0
-atan(y/x) − π if x < 0 and y < 0
-
-
-*/
