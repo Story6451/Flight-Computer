@@ -6,8 +6,8 @@ class DataReading
 private:
     /* data */
     LPS ps;
-    const int ITER_NO = 1000;
-    int altIter;
+    const uint32_t ITER_NO = 1000;
+    uint32_t altIter;
     float pressure = 0.0; 
     float altitude = 0.0; 
     float temperature = 0.0;
@@ -26,7 +26,6 @@ private:
 public:
     DataReading(/* args */); 
     void AltitudeCalibration();
-    void PrintAltitude();
     void ReadAccelerometer();
     void ReadMagnetometer();
 };
