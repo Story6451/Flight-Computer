@@ -12,6 +12,7 @@ DataLogging::DataLogging()
     Serial.println("3. did you change the chipSelect pin to match your shield or module?");
     Serial.println("Note: press reset button on the board and reopen this Serial Monitor after fixing your issue!");
     while (true);
+  }
 }
 
 void DataLogging::LogData()
