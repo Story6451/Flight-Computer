@@ -3,7 +3,7 @@
 #include <LSM6.h>
 #include <LPS.h>
 
-LPS lps;
+LPS ps;
 LIS3MDL mag;
 LSM6 imu;
 
@@ -86,8 +86,8 @@ void DataReading::CalculateHeading()
 
 void DataReading::ReadBarometer()
 {
-  temperature = lps.readTemperatureC();
-  pressure = lps.readPressureMillibars();
-  altitude = lps.pressureToAltitudeMeters(pressure);
+  temperature = ps.readTemperatureC();
+  pressure = ps.readPressureMillibars();
+  altitude = ps.pressureToAltitudeMeters(pressure);
 }
     

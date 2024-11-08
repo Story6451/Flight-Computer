@@ -55,4 +55,4 @@ DataTransmitting::DataTransmitting(uint32_t pressure, uint16_t temperature, std:
         LoRa.print(value);
     }
     LoRa.endPacket(); //End sending
-};
+}
