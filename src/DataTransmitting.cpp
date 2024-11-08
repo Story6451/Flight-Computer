@@ -5,7 +5,34 @@
 #include <SPI.h>
 #include "LoRa-SOLDERED.h"
 
-DataTransmitting::DataTransmitting(uint32_t pressure, uint16_t temperature, std::vector<int16_t> acceleration, std::vector<int16_t> magneticFluxDensityDividedBy100, std::vector<int16_t> rotation, std::vector<int16_t> gpsCoordinates, int16_t velocityDividedBy100, uint16_t altitude)
+std::vector<uint8_t> DataTransmitting::CreatePacket(uint8_t start_byte){
+    const uint8_t START_BYTE = start_byte;
+    std::vector<uint8_t> packet = { START_BYTE };
+    return packet;
+}
+
+void DataTransmitting::Parse32Bit(std::vector<uint8_t> packet, uint32_t data){
+    packet.push_back((data >> 24) & 0xFF);
+    packet.push_back((data >> 16) & 0xFF);
+    packet.push_back((data >> 8) & 0xFF);
+    packet.push_back(data & 0xFF);
+}
+
+void DataTransmitting::Parse16Bit(std::vector<uint8_t> packet, uint16_t data){
+    packet.push_back((data >> 8) & 0xFF);
+    packet.push_back(data & 0xFF);
+}
+
+uint16_t DataTransmitting::CalculateChecksum(std::vector<uint8_t> packet){
+    uint16_t checksum = 0;
+    for (size_t i=1; i<packet.size(); i++){
+        checksum ^= packet[i];
+    }
+    return checksum;
+}
+
+DataTransmitting::DataTransmitting()
+    //uint32_t pressure, uint16_t temperature, std::vector<int16_t> acceleration, std::vector<int16_t> magneticFluxDensityDividedBy100, std::vector<int16_t> rotation, std::vector<int16_t> gpsCoordinates, int16_t velocityDividedBy100, uint16_t altitude)
 {
     LoRa.setPins(csPin, resetPin, irqPin);// set CS, reset, IRQ pin
 
