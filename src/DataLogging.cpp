@@ -18,24 +18,54 @@ void DataLogging::LogData()
 {
     File dataFile = SD.open("datalog.txt", FILE_WRITE);
     if (dataFile) {
+
+        Serial.println("STATE,TITLE1(UNIT1),TITLE2(UNIT2),TITLE3(UNIT3)");
+
         for(;;){
             int State = 0;
+            float value1 = 1.0;
+            float value2 = 2.0;
+            float value3 = 3.0;
             
-            Serial.println("STATE,TITLE1(UNIT1),TITLE2(UNIT2),TITLE3(UNIT3)");
             String dataString = "";
-            dataString += String(State);
-            dataString += ",";
 
             for(int analogPin = 0; analogPin < 3; analogPin++){
                 int sensor = analogRead(analogPin);
+                String dataString = "";
+    
+                if(analogPin == 1 ){
+                    if (sensor > value1){
+                        State = 1;
+                        dataString += String(State);
+                dataString += ",";
+                    }
+                    else if (sensor > value2){
+                        State = 2;
+                        dataString += String(State);
+                        dataString += ",";
+                    }
+                    else if (sensor > value3){
+                        State = 3;
+                        dataString += String(State);
+                        dataString += ",";
+                    }
+                    else{
+                        dataString += String(State);
+                        dataString += ",";
+                        continue;
+                    }
+                }
+
                 dataString += String(sensor);
-                if(analogpin == 1 )
+
                 if (analogPin < 2) {
                     dataString += ",";
                 }
-
-
             }
+            Serial.println(dataString);
         }
+    }
+    else{
+        Serial.println("Error in opening file");
     }
 }
