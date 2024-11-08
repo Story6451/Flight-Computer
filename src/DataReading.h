@@ -4,8 +4,6 @@
 class DataReading
 {
 private:
-    /* data */
-    LPS ps;
     const uint32_t ITER_NO = 1000;
     uint32_t altIter;
     float pressure = 0.0; 
@@ -29,5 +27,6 @@ public:
     void ReadAccelerometer();
     void ReadMagnetometer();
     void CalculateHeading();
+    void ReadBarometer();
 };
 

@@ -1,7 +1,9 @@
 #include <DataReading.h>
 #include <LIS3MDL.h>
 #include <LSM6.h>
+#include <LPS.h>
 
+LPS lps;
 LIS3MDL mag;
 LSM6 imu;
 
@@ -80,5 +82,12 @@ void DataReading::CalculateHeading()
   UncalibratedHeading = atan(MagnetometerYCalculated / MagnetometerXCalculated);
   Serial.print("Uncalibrated Heading:");
   Serial.println(UncalibratedHeading);
+}
+
+void DataReading::ReadBarometer()
+{
+  temperature = lps.readTemperatureC();
+  pressure = lps.readPressureMillibars();
+  altitude = lps.pressureToAltitudeMeters(pressure);
 }
     
