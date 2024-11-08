@@ -1,84 +1,54 @@
 #include <Arduino.h>
+#include <vector>
+#include <cstdint>
 
 class DataTransmitting
 {
 private:
+    const int csPin = 10;          // LoRa radio chip select
+    const int resetPin = 4;       // LoRa radio reset
+    const int irqPin = 2;         // Change for your board; must be a hardware interrupt pin
     /* data */
+    // dummy data for testing the rest of the code
+    uint32_t pressure = 10000;
+    uint16_t temperature = 100;
+    std::vector<int16_t> acceleration = { 2, -1, 4 };
+    std::vector<uint32_t> magneticFluxDensity = { 10, 50, 20 }; // Magnetometer value * 100
+    std::vector<int16_t> rotation = { 0, 1, -4 };
+    std::vector<int16_t> gpsCoordinates = { 200, 100 };
+    int16_t velocity = -2; // Velocity value * 100
+    uint16_t altitude = 2000;
 public:
- 
-    DataTransmitting(/* args */);
+    // creating the packet and adds the start byte to it
+    std::vector<uint8_t> CreatePacket(uint8_t start_byte){
+        const uint8_t START_BYTE = start_byte;
+        std::vector<uint8_t> packet = { START_BYTE };
+        return packet;
+    }
 
+    // breaks apart any 32bit data into 8bit chunks and adds it to the packet
+    void Parse32Bit(std::vector<uint8_t> packet, uint32_t data){
+        packet.push_back((data >> 24) & 0xFF);
+        packet.push_back((data >> 16) & 0xFF);
+        packet.push_back((data >> 8) & 0xFF);
+        packet.push_back(data & 0xFF);
+    }
 
-/**
- **************************************************
- *
- * @file        LoRaSender.ino
- * @brief       This example shows how to use LoRa to send packets
- *				to another LoRa module which is set as receiver
- *              
- *
- *
- *
- * @authors    	Tom Igoe
- *
- * Modified by: Soldered for use with www.soldered.com/333157 , www.soldered.com/333158
- *
- ***************************************************/
+    // breaks apart any 16bit data into 8bit chunks and adds it to the packet
+    void Parse16Bit(std::vector<uint8_t> packet, uint16_t data){
+        packet.push_back((temperature >> 8) & 0xFF);
+        packet.push_back(temperature & 0xFF);
+    }
 
-///                 Arduino      RFM95/96/97/98
-///                 GND----------GND   (ground in)
-///                 3V3----------3.3V  (3.3V in)
-///             pin D4-----------RESET  (RESET)
-/// interrupt 0 pin D2-----------DIO0  (interrupt request out)
-///          SS pin D10----------NSS   (CS chip select in)
-///         SCK pin D13----------SCK   (SPI clock in)
-///        MOSI pin D11----------MOSI  (SPI Data in)
-///        MISO pin D12----------MISO  (SPI Data out)
-/// This is pinout for Dasduino Core, if you are using other MCU, use SPI pins
-///and Interrupt pin 0, if Dasduino ConnectPlus is used
-/// (or any other ESP32 board) use pins(SS=27, RST=2, DIO0=32, MISO=33, MOSI=25,SCK=26)
-/*
-#define LORA		//Specify that module will be used for LoRa to LoRa communication
-#include <SPI.h>
-#include "LoRa-SOLDERED.h"
+    uint16_t CalculateChecksum(std::vector<uint8_t> packet){
+        uint16_t checksum = 0;
+        for (size_t i=1; i<packet.size(); i++){
+            checksum ^= packet[i];
+        }
+        return checksum;
+    }
 
-const int csPin = 10;          // LoRa radio chip select
-const int resetPin = 4;       // LoRa radio reset
-const int irqPin = 2;         // Change for your board; must be a hardware interrupt pin
-
-int counter = 0;
-
-void setup()
-{
-  Serial.begin(9600);  //Initialize serial communication with PC
-  while (!Serial);
-
-  Serial.println("LoRa Sender");
-  
-    // Override the default CS, reset, and IRQ pins (optional)
-  LoRa.setPins(csPin, resetPin, irqPin);// set CS, reset, IRQ pin
-
-  if (!LoRa.begin(868E6)) // Initialize LoRa at 868 MHz
-  {
-    Serial.println("Starting LoRa failed!");
-    while (1);
-  }
-}
-
-void loop()
-{
-  Serial.print("Sending packet: ");
-  Serial.println(counter);
-
-  // Send packet
-  LoRa.beginPacket(); //Begin sending
-  LoRa.print("hello ");	//Send payload
-  LoRa.print(counter);	//Send payload
-  LoRa.endPacket(); //End sending
-
-  counter++;	//Count sended messages
-
-}
-*/
+    DataTransmitting(uint32_t pressure, uint16_t temperature, std::vector<int16_t> acceleration, std::vector<int16_t> magneticFluxDensityDividedBy100, std::vector<int16_t> rotation, std::vector<int16_t> gpsCoordinates, int16_t velocityDividedBy100, uint16_t altitude);
+    //uint32_t pressure, uint16_t temperature, std::vector<int16_t> acceleration, std::vector<int16_t> magneticFluxDensity, std::vector<int16_t> rotation, std::vector<int16_t> gpsCoordinates, int16_t velocity/100, uint16_t altitude 
 };
 
