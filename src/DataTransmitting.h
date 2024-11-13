@@ -19,6 +19,8 @@ private:
     int16_t velocityDividedBy100 = -2; // Velocity value * 100
     uint16_t altitude = 2000;
 public:
+    // Initialising the LoRa
+    void InitialiseLoRa();
     // creating the packet and adds the start byte to it
     std::vector<uint8_t> CreatePacket(uint8_t start_byte);
 

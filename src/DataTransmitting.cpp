@@ -5,6 +5,11 @@
 #include <SPI.h>
 #include "LoRa-SOLDERED.h"
 
+void DataTransmitting::InitialiseLoRa(){
+    LoRa.setPins(csPin, resetPin, irqPin);// set CS, reset, IRQ pin
+    LoRa.begin(433E6);// Initialize LoRa at 868 MHz
+}
+
 std::vector<uint8_t> DataTransmitting::CreatePacket(uint8_t start_byte){
     const uint8_t START_BYTE = start_byte;
     std::vector<uint8_t> packet = { START_BYTE };
@@ -34,8 +39,6 @@ uint16_t DataTransmitting::CalculateChecksum(std::vector<uint8_t> packet){
 DataTransmitting::DataTransmitting()
     //uint32_t pressure, uint16_t temperature, std::vector<int16_t> acceleration, std::vector<int16_t> magneticFluxDensityDividedBy100, std::vector<int16_t> rotation, std::vector<int16_t> gpsCoordinates, int16_t velocityDividedBy100, uint16_t altitude)
 {
-    LoRa.setPins(csPin, resetPin, irqPin);// set CS, reset, IRQ pin
-
     // (list of all data to recieve and in which format)
     //uint32_t pressure, uint16_t temperature, std::vector<int16_t> acceleration, 
     //std::vector<int16_t> magneticFluxDensity, std::vector<int16_t> rotation, std::vector<int16_t> gpsCoordinates,
