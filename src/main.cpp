@@ -12,6 +12,7 @@ void setup()
   Serial.begin(9600);
   dataReader.AltitudeCalibration();
   // put your setup code here, to run once:
+  dataTransmitter.InitialiseLoRa();
 }
 
 void loop() 

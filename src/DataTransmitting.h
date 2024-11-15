@@ -5,9 +5,9 @@
 class DataTransmitting
 {
 private:
-    const int csPin = 10;          // LoRa radio chip select
-    const int resetPin = 4;       // LoRa radio reset
-    const int irqPin = 2;         // Change for your board; must be a hardware interrupt pin
+    const int csPin = 41;          // LoRa radio chip select
+    const int resetPin = 13;       // LoRa radio reset
+    const int irqPin = 37;         // Change for your board; must be a hardware interrupt pin
     /* data */
     // dummy data for testing the rest of the code
     uint32_t pressure = 10000;
