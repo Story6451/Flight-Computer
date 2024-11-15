@@ -8,6 +8,7 @@ private:
     
 public:
     DataLogging(/* args */);
+    void Begin();
     void LogData();
 };
 

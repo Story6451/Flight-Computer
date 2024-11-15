@@ -23,7 +23,8 @@ private:
     float UncalibratedHeading = 0.0;
 public:
     DataReading(/* args */); 
-    void AltitudeCalibration();
+    void Begin();
+    void AltitudeCalibration();//this doesnt work, it crashes, fix
     void ReadAccelerometer();
     void ReadMagnetometer();
     void CalculateHeading();

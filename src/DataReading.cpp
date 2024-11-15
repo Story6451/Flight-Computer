@@ -9,11 +9,16 @@ LSM6 imu;
 
 
 DataReading::DataReading()
+{  
+}
+
+void DataReading::Begin()
 {
+
+  
   if (!ps.init())
   {
     Serial.println("Failed to autodetect pressure sensor!");
-    while (1);
   }
   ps.enableDefault();
 
@@ -31,17 +36,16 @@ DataReading::DataReading()
   }
   imu.enableDefault();
 
-  AltitudeCalibration();
+  //AltitudeCalibration();
 
   Serial.println("Calibration complete");
-    
 }
 
 void DataReading::AltitudeCalibration()
 {
   float altitudeSum = 0;
 
-  for (altIter = 0; altIter < ITER_NO; altIter++)
+  for (int i = 0; i < ITER_NO; i++)
   {
     pressure = ps.readPressureMillibars();
     altitude = ps.pressureToAltitudeMeters(pressure);
@@ -78,33 +82,27 @@ void ReadMagnetometer() {
     Serial.println(MagnetometerZValue);
 }
 
-void CalculateHeading() {
-    float normAcc = sqrt(AccelXValue * AccelXValue + AccelYValue * AccelYValue + AccelZValue * AccelZValue);
-    AccelXValue /= normAcc;
-    AccelYValue /= normAcc;
-    AccelZValue /= normAcc;
+void CalculateHeading() 
+{
+  float normAcc = sqrt(AccelXValue * AccelXValue + AccelYValue * AccelYValue + AccelZValue * AccelZValue);
+  AccelXValue /= normAcc;
+  AccelYValue /= normAcc;
+  AccelZValue /= normAcc;
 
-    MagnetometerPitch = asin(-AccelXValue);
-    MagnetometerRoll = asin(AccelYValue / cos(MagnetometerPitch));
+  MagnetometerPitch = asin(-AccelXValue);
+  MagnetometerRoll = asin(AccelYValue / cos(MagnetometerPitch));
 
-    MagnetometerXCalculated = (MagnetometerXValue * cos(MagnetometerPitch)) + (MagnetometerZValue * sin(MagnetometerPitch));
-    MagnetometerYCalculated = (MagnetometerXValue * sin(MagnetometerRoll) * sin(MagnetometerPitch)) + (MagnetometerYValue * cos(MagnetometerRoll)) - (MagnetometerZValue * sin(MagnetometerRoll) * cos(MagnetometerPitch));
+  MagnetometerXCalculated = (MagnetometerXValue * cos(MagnetometerPitch)) + (MagnetometerZValue * sin(MagnetometerPitch));
+  MagnetometerYCalculated = (MagnetometerXValue * sin(MagnetometerRoll) * sin(MagnetometerPitch)) + (MagnetometerYValue * cos(MagnetometerRoll)) - (MagnetometerZValue * sin(MagnetometerRoll) * cos(MagnetometerPitch));
 
-    UncalibratedHeading = atan2(MagnetometerYCalculated, MagnetometerXCalculated);
+  UncalibratedHeading = atan2(MagnetometerYCalculated, MagnetometerXCalculated);
 
-    UncalibratedHeading = UncalibratedHeading * 180 / M_PI;
-    if (UncalibratedHeading < 0) {
-        UncalibratedHeading += 360;
-    }
+  UncalibratedHeading = UncalibratedHeading * 180 / M_PI;
+  if (UncalibratedHeading < 0) 
+  {
+      UncalibratedHeading += 360;
+  }
 
-    Serial.print("Uncalibrated Heading:");
-    Serial.println(UncalibratedHeading);
-}
-
-int main() {
-    ReadAccelerometer();
-    ReadMagnetometer();
-    CalculateHeading();
-
-    return 0;
+  Serial.print("Uncalibrated Heading:");
+  Serial.println(UncalibratedHeading);
 }
