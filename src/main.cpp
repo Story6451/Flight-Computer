@@ -7,7 +7,7 @@
 
 DataLogging dataLogger;
 DataReading dataReader;
-//DataTransmitting dataTransmitter;
+DataTransmitting dataTransmitter;
 
 EKF ekf;
 
@@ -20,7 +20,7 @@ void setup()
   dataReader.Begin();
   //dataReader.AltitudeCalibration();
   // put your setup code here, to run once:
-  //dataTransmitter.InitialiseLoRa();
+  dataTransmitter.InitialiseLoRa();
 
   //ekf.initkalman();
 }
