@@ -61,6 +61,7 @@ void DataReading::ReadAccelerometer()
     AccelZValue = imu.a.z * ACCEL_SENSITIVITY * 9.81 / 1000.0;
 }
 
+//encapsulating the data
 float DataReading::ReturnAccelerometerX()
 {
   return AccelXValue;
@@ -85,19 +86,12 @@ float DataReading::ReturnMagnetometerZ()
 {
   return MagnetometerZValue;
 }
+
 void DataReading::ReadMagnetometer() {
     mag.read();
     MagnetometerXValue = mag.m.x;
     MagnetometerYValue = mag.m.y;
     MagnetometerZValue = mag.m.z;
-
-    Serial.println("MAGNETOMETER READINGS");
-    Serial.print("Magnetometer: X=");
-    Serial.print(MagnetometerXValue);
-    Serial.print(" Y=");
-    Serial.print(MagnetometerYValue);
-    Serial.print(" Z=");
-    Serial.println(MagnetometerZValue);
 }
 
 void DataReading::ReadBarometer()
