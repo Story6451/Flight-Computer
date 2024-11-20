@@ -29,11 +29,29 @@ void loop()
 {
   //Serial.println("test");
   // put your main code here, to run repeatedly:
-  dataReader.ReadAccelerometer();
-  Serial.println(dataReader.ReturnAccelerometerX());
-  Serial.println(dataReader.ReturnAccelerometerY());
-  Serial.println(dataReader.ReturnAccelerometerZ());
-  Serial.println();
 
+  //Accelerometer
+  dataReader.ReadAccelerometer();
+  Serial.print("Accel X: ");
+  Serial.println(dataReader.ReturnAccelerometerX());
+
+  Serial.print("Accel Y: ");
+  Serial.println(dataReader.ReturnAccelerometerY());
+
+  Serial.print("Accel Z: ");
+  Serial.println(dataReader.ReturnAccelerometerZ());
+
+  //Magnetometer
+  dataReader.ReadMagnetometer();
+  Serial.print("Magnetic Field Strength X: ");
+  Serial.println(dataReader.ReturnMagnetometerX());
+
+  Serial.print("Magnetic Field Strength Y: ");
+  Serial.println(dataReader.ReturnMagnetometerY());
+
+  Serial.print("Magnetic Field Strength Z: ");
+  Serial.println(dataReader.ReturnMagnetometerZ());
+
+  Serial.println();
   delay(100);
 }
