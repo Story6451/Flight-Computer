@@ -29,6 +29,9 @@ public:
     float ReturnAccelerometerX();
     float ReturnAccelerometerY();
     float ReturnAccelerometerZ();
+    float ReturnMagnetometerX();
+    float ReturnMagnetometerY();
+    float ReturnMagnetometerZ();
     void ReadMagnetometer();
     void ReadBarometer();
     void CalculateHeight();

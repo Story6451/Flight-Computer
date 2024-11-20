@@ -75,7 +75,18 @@ float DataReading::ReturnAccelerometerZ()
 {
   return AccelZValue;
 }
-
+float DataReading::ReturnMagnetometerX()
+{
+  return MagnetometerXValue
+}
+float DataReading::ReturnMagnetometerY()
+{
+  return MagnetometerYValue
+}
+float DataReading::ReturnMagnetometerZ()
+{
+  return MagnetometerZValue
+}
 void DataReading::ReadMagnetometer() {
     mag.read();
     MagnetometerXValue = mag.m.x;
