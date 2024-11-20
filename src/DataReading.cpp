@@ -90,14 +90,6 @@ void DataReading::ReadMagnetometer() {
     MagnetometerXValue = mag.m.x;
     MagnetometerYValue = mag.m.y;
     MagnetometerZValue = mag.m.z;
-
-    Serial.println("MAGNETOMETER READINGS");
-    Serial.print("Magnetometer: X=");
-    Serial.print(MagnetometerXValue);
-    Serial.print(" Y=");
-    Serial.print(MagnetometerYValue);
-    Serial.print(" Z=");
-    Serial.println(MagnetometerZValue);
 }
 
 void DataReading::ReadBarometer()
