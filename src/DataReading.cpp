@@ -3,7 +3,7 @@
 #include <LSM6.h>
 #include <LPS.h>
 
-LPS ps;
+LPS baro;
 LIS3MDL mag;
 LSM6 imu;
 
@@ -16,11 +16,11 @@ void DataReading::Begin()
 {
 
   
-  if (!ps.init())
+  if (!baro.init())
   {
     Serial.println("Failed to autodetect pressure sensor!");
   }
-  ps.enableDefault();
+  baro.enableDefault();
 
   if (!mag.init()) 
   {
@@ -47,8 +47,8 @@ void DataReading::AltitudeCalibration()
 
   for (int i = 0; i < ITER_NO; i++)
   {
-    pressure = ps.readPressureMillibars();
-    altitude = ps.pressureToAltitudeMeters(pressure);
+    pressure = baro.readPressureMillibars();
+    altitude = baro.pressureToAltitudeMeters(pressure);
     altitudeSum += altitude;
   }
 
@@ -61,13 +61,13 @@ float MagnetometerPitch, MagnetometerRoll;
 float MagnetometerXCalculated, MagnetometerYCalculated;
 float UncalibratedHeading;
 
-void ReadAccelerometer() {
+void DataReading::ReadAccelerometer() {
     AccelXValue = imu.a.x;
     AccelYValue = imu.a.y;
     AccelZValue = imu.a.z;
 }
 
-void ReadMagnetometer() {
+void DataReading::ReadMagnetometer() {
     mag.read();
     MagnetometerXValue = mag.m.x;
     MagnetometerYValue = mag.m.y;
@@ -82,7 +82,18 @@ void ReadMagnetometer() {
     Serial.println(MagnetometerZValue);
 }
 
-void CalculateHeading() 
+void DataReading::ReadBarometer()
+{
+  pressure = baro.readPressureMillibars();
+  temperature = baro.readTemperatureC();
+}
+
+void DataReading::CalculateHeight()
+{
+  
+}
+
+void DataReading::CalculateHeading() 
 {
   float normAcc = sqrt(AccelXValue * AccelXValue + AccelYValue * AccelYValue + AccelZValue * AccelZValue);
   AccelXValue /= normAcc;
