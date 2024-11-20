@@ -75,15 +75,15 @@ float DataReading::ReturnAccelerometerZ()
 }
 float DataReading::ReturnMagnetometerX()
 {
-  return MagnetometerXValue
+  return MagnetometerXValue;
 }
 float DataReading::ReturnMagnetometerY()
 {
-  return MagnetometerYValue
+  return MagnetometerYValue;
 }
 float DataReading::ReturnMagnetometerZ()
 {
-  return MagnetometerZValue
+  return MagnetometerZValue;
 }
 void DataReading::ReadMagnetometer() {
     mag.read();
