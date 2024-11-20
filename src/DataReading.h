@@ -4,7 +4,7 @@
 class DataReading
 {
 private:
-    const uint32_t ITER_NO = 1000;
+    const uint32_t ITER_NO = 100;
     uint32_t altIter;
     float pressure = 0.0; 
     float altitude = 0.0; 
@@ -21,6 +21,8 @@ private:
     float MagnetometerXCalculated = 0.0;
     float MagnetometerYCalculated = 0.0;
     float UncalibratedHeading = 0.0;
+
+    static const float ACCEL_SENSITIVITY = 0.061; // in mg/LSB, assuming ±2g full-scale range
 public:
     DataReading(/* args */); 
     void Begin();
@@ -29,9 +31,14 @@ public:
     float ReturnAccelerometerX();
     float ReturnAccelerometerY();
     float ReturnAccelerometerZ();
+    float ReturnMagnetometerX();
+    float ReturnMagnetometerY();
+    float ReturnMagnetometerZ();
+    float ReturnAltitude();
+    float ReturnPressure();
+    float ReturnTemperature();
     void ReadMagnetometer();
     void ReadBarometer();
-    void CalculateHeight();
     void CalculateHeading();
 };
 

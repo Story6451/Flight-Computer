@@ -14,8 +14,6 @@ DataReading::DataReading()
 
 void DataReading::Begin()
 {
-
-  
   if (!baro.init())
   {
     Serial.println("Failed to autodetect pressure sensor!");
@@ -58,11 +56,12 @@ void DataReading::AltitudeCalibration()
 void DataReading::ReadAccelerometer() 
 {
     imu.read();
-    AccelXValue = imu.a.x;
-    AccelYValue = imu.a.y;
-    AccelZValue = imu.a.z;
+    AccelXValue = imu.a.x * ACCEL_SENSITIVITY * 9.81 / 1000.0;
+    AccelYValue = imu.a.y * ACCEL_SENSITIVITY * 9.81 / 1000.0;
+    AccelZValue = imu.a.z * ACCEL_SENSITIVITY * 9.81 / 1000.0;
 }
 
+//encapsulating the data
 float DataReading::ReturnAccelerometerX()
 {
   return AccelXValue;
@@ -75,33 +74,45 @@ float DataReading::ReturnAccelerometerZ()
 {
   return AccelZValue;
 }
+float DataReading::ReturnMagnetometerX()
+{
+  return MagnetometerXValue;
+}
+float DataReading::ReturnMagnetometerY()
+{
+  return MagnetometerYValue;
+}
+float DataReading::ReturnMagnetometerZ()
+{
+  return MagnetometerZValue;
+}
 
 void DataReading::ReadMagnetometer() {
     mag.read();
     MagnetometerXValue = mag.m.x;
     MagnetometerYValue = mag.m.y;
     MagnetometerZValue = mag.m.z;
-
-    Serial.println("MAGNETOMETER READINGS");
-    Serial.print("Magnetometer: X=");
-    Serial.print(MagnetometerXValue);
-    Serial.print(" Y=");
-    Serial.print(MagnetometerYValue);
-    Serial.print(" Z=");
-    Serial.println(MagnetometerZValue);
 }
 
 void DataReading::ReadBarometer()
 {
   pressure = baro.readPressureMillibars();
   temperature = baro.readTemperatureC();
+  altitude = baro.pressureToAltitudeMeters(pressure);
 }
 
-void DataReading::CalculateHeight()
+float DataReading::ReturnAltitude()
 {
-
+  return altitude;
 }
-
+float DataReading::ReturnPressure()
+{
+  return pressure;
+}
+float DataReading::ReturnTemperature()
+{
+  return temperature;
+}
 void DataReading::CalculateHeading() 
 {
   float normAcc = sqrt(AccelXValue * AccelXValue + AccelYValue * AccelYValue + AccelZValue * AccelZValue);
