@@ -22,7 +22,7 @@ void setup()
   // put your setup code here, to run once:
   //dataTransmitter.InitialiseLoRa();
 
-  //ekf.initkalman();
+  ekf.initkalman();
 }
 
 void loop() 
@@ -63,6 +63,14 @@ void loop()
 
   Serial.print("Temperature: ");
   Serial.println(dataReader.ReturnTemperature());
+
+  float accel = -dataReader.ReturnAccelerometerX();
+  ekf.predict(accel);
+
+  ekf.updateBaro(dataReader.ReturnAltitude());
+
+  Serial.print("Kalman Position: ");
+  Serial.println(ekf.getKalmanPosition());
 
   Serial.println();
   delay(100);
