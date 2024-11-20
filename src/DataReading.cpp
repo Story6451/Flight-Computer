@@ -102,9 +102,21 @@ void DataReading::ReadBarometer()
 
 void DataReading::CalculateHeight()
 {
-
+  altitude = baro.pressureToAltitudeMeters(pressure);
 }
 
+float DataReading::ReturnAltitude()
+{
+  return altitude;
+}
+float DataReading::ReturnPressure()
+{
+  return pressure;
+}
+float DataReading::ReturnTemperature()
+{
+  return temperature;
+}
 void DataReading::CalculateHeading() 
 {
   float normAcc = sqrt(AccelXValue * AccelXValue + AccelYValue * AccelYValue + AccelZValue * AccelZValue);
