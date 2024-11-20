@@ -20,7 +20,7 @@ private:
     uint16_t mAltitude = 2000;
 public:
     // Initialising the LoRa
-    void InitialiseLoRa();
+    void Begin();
     // creating the packet and adds the start byte to it
     std::vector<uint8_t> CreatePacket(uint8_t start_byte);
 
@@ -31,6 +31,8 @@ public:
     void Parse16Bit(std::vector<uint8_t> packet, uint16_t data);
 
     uint16_t CalculateChecksum(std::vector<uint8_t> packet);
+
+    void Transmit();
 
     DataTransmitting();
         //uint32_t pressure, uint16_t temperature, std::vector<int16_t> acceleration, std::vector<int16_t> magneticFluxDensityDividedBy100, std::vector<int16_t> rotation, std::vector<int16_t> gpsCoordinates, int16_t velocityDividedBy100, uint16_t altitude);

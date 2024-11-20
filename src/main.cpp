@@ -20,7 +20,7 @@ void setup()
   dataReader.Begin();
   //dataReader.AltitudeCalibration();
   // put your setup code here, to run once:
-  dataTransmitter.InitialiseLoRa();
+  dataTransmitter.Begin();
 
   ekf.initkalman();
 }
@@ -73,5 +73,6 @@ void loop()
   Serial.println(ekf.getKalmanPosition());
 
   Serial.println();
+  dataTransmitter.Transmit();
   delay(100);
 }
