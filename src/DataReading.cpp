@@ -57,6 +57,7 @@ void DataReading::AltitudeCalibration()
 
 void DataReading::ReadAccelerometer() 
 {
+    imu.read();
     AccelXValue = imu.a.x;
     AccelYValue = imu.a.y;
     AccelZValue = imu.a.z;

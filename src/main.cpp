@@ -21,14 +21,17 @@ void setup()
   // put your setup code here, to run once:
   //dataTransmitter.InitialiseLoRa();
 
-  ekf.initkalman();
+  //ekf.initkalman();
 }
 
 void loop() 
 {
-  Serial.println("test");
+  //Serial.println("test");
   // put your main code here, to run repeatedly:
-  Serial.print(dataReader.ReturnAccelerometerX());
-  Serial.print(dataReader.ReturnAccelerometerY());
-  Serial.print(dataReader.ReturnAccelerometerZ());
+  dataReader.ReadAccelerometer();
+
+  Serial.println(dataReader.ReturnAccelerometerX());
+  Serial.println(dataReader.ReturnAccelerometerY());
+  Serial.println(dataReader.ReturnAccelerometerZ());
+  Serial.println();
 }
