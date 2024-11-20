@@ -55,13 +55,8 @@ void DataReading::AltitudeCalibration()
   altitudeOffset = altitudeSum / ITER_NO;
 }
 
-float AccelXValue, AccelYValue, AccelZValue;
-float MagnetometerXValue, MagnetometerYValue, MagnetometerZValue;
-float MagnetometerPitch, MagnetometerRoll;
-float MagnetometerXCalculated, MagnetometerYCalculated;
-float UncalibratedHeading;
-
-void DataReading::ReadAccelerometer() {
+void DataReading::ReadAccelerometer() 
+{
     AccelXValue = imu.a.x;
     AccelYValue = imu.a.y;
     AccelZValue = imu.a.z;
