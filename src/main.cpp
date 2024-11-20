@@ -7,13 +7,7 @@
 
 DataLogging dataLogger;
 DataReading dataReader;
-<<<<<<< HEAD
 DataTransmitting dataTransmitter;
-=======
-//DataTransmitting dataTransmitter;
-//git pull origin main --no-rebase
-
->>>>>>> e12323d39a5fa143c6ab81d3944de817f8648fef
 
 EKF ekf;
 
@@ -28,7 +22,6 @@ void setup()
   // put your setup code here, to run once:
   dataTransmitter.InitialiseLoRa();
 
-  //ekf.initkalman();
   ekf.initkalman();
 }
 
