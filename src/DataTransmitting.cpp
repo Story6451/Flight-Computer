@@ -51,10 +51,10 @@ void DataTransmitting::Transmit()
     packet.push_back(checksum);
 
     // for UI tests
-    for (uint8_t value : packet){
-        Serial.println(value);
-    }
-
+    //for (uint8_t value : packet){
+    //    Serial.println(value);
+    //}
+    
     // write to LoRa
     // Send packet
     LoRa.beginPacket(); //Begin sending
@@ -62,7 +62,8 @@ void DataTransmitting::Transmit()
         LoRa.print(value);
     }
     LoRa.endPacket(); //End sending
-
+    
+    Serial.println("Sent Packet");
 }
 
 std::vector<uint8_t> DataTransmitting::CreatePacket(uint8_t start_byte){
