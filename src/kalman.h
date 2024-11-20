@@ -1,10 +1,3 @@
-#ifndef KALMAN
-#define KALMAN
-
-//#include <config.h>
-//#include <global.h>
-//#include <data.h>
-
 class EKF
 {
 
@@ -28,5 +21,3 @@ private:
 
     bool isFirstStep = true;
 };
-
-#endif /* KALMAN */

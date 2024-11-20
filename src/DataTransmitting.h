@@ -5,19 +5,19 @@
 class DataTransmitting
 {
 private:
-    const int csPin = 41;          // LoRa radio chip select
-    const int resetPin = 13;       // LoRa radio reset
-    const int irqPin = 37;         // Change for your board; must be a hardware interrupt pin
+    const int mCsPin = 41;          // LoRa radio chip select
+    const int mResetPin = 13;       // LoRa radio reset
+    const int mIrqPin = 37;         // Change for your board; must be a hardware interrupt pin
     /* data */
     // dummy data for testing the rest of the code
-    uint32_t pressure = 10000;
-    uint16_t temperature = 100;
-    std::vector<int16_t> acceleration = { 2, -1, 4 };
-    std::vector<uint32_t> magneticFluxDensityDividedBy100 = { 10, 50, 20 }; // Magnetometer value * 100
-    std::vector<int16_t> rotation = { 0, 1, -4 };
-    std::vector<int16_t> gpsCoordinates = { 200, 100 };
-    int16_t velocityDividedBy100 = -2; // Velocity value * 100
-    uint16_t altitude = 2000;
+    uint32_t mPressure = 10000;
+    uint16_t mTemperature = 100;
+    std::vector<int16_t> mAcceleration = { 2, -1, 4 };
+    std::vector<uint32_t> mMagneticFluxDensityDividedBy100 = { 10, 50, 20 }; // Magnetometer value * 100
+    std::vector<int16_t> mRotation = { 0, 1, -4 };
+    std::vector<int16_t> mGpsCoordinates = { 200, 100 };
+    int16_t mVelocityDividedBy100 = -2; // Velocity value * 100
+    uint16_t mAltitude = 2000;
 public:
     // Initialising the LoRa
     void InitialiseLoRa();
