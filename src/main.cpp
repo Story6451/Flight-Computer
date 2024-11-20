@@ -52,6 +52,18 @@ void loop()
   Serial.print("Magnetic Field Strength Z: ");
   Serial.println(dataReader.ReturnMagnetometerZ());
 
+  //Baro
+  dataReader.ReadBarometer();
+
+  Serial.print("Baro Altitude: ");
+  Serial.println(dataReader.ReturnAltitude());
+
+  Serial.print("Pressure: ");
+  Serial.println(dataReader.ReturnPressure());
+
+  Serial.print("Temperature: ");
+  Serial.println(dataReader.ReturnTemperature());
+
   Serial.println();
   delay(100);
 }
