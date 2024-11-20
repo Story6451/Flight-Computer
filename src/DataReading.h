@@ -39,7 +39,6 @@ public:
     float ReturnTemperature();
     void ReadMagnetometer();
     void ReadBarometer();
-    void CalculateHeight();
     void CalculateHeading();
 };
 
