@@ -98,10 +98,6 @@ void DataReading::ReadBarometer()
 {
   pressure = baro.readPressureMillibars();
   temperature = baro.readTemperatureC();
-}
-
-void DataReading::CalculateHeight()
-{
   altitude = baro.pressureToAltitudeMeters(pressure);
 }
 
