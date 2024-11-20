@@ -14,8 +14,6 @@ DataReading::DataReading()
 
 void DataReading::Begin()
 {
-
-  
   if (!baro.init())
   {
     Serial.println("Failed to autodetect pressure sensor!");
@@ -58,9 +56,9 @@ void DataReading::AltitudeCalibration()
 void DataReading::ReadAccelerometer() 
 {
     imu.read();
-    AccelXValue = imu.a.x;
-    AccelYValue = imu.a.y;
-    AccelZValue = imu.a.z;
+    AccelXValue = imu.a.x * ACCEL_SENSITIVITY * 9.81 / 1000.0;
+    AccelYValue = imu.a.y * ACCEL_SENSITIVITY * 9.81 / 1000.0;
+    AccelZValue = imu.a.z * ACCEL_SENSITIVITY * 9.81 / 1000.0;
 }
 
 float DataReading::ReturnAccelerometerX()

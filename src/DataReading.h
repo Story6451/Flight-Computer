@@ -21,6 +21,8 @@ private:
     float MagnetometerXCalculated = 0.0;
     float MagnetometerYCalculated = 0.0;
     float UncalibratedHeading = 0.0;
+
+    static const float ACCEL_SENSITIVITY = 0.061; // in mg/LSB, assuming ±2g full-scale range
 public:
     DataReading(/* args */); 
     void Begin();
