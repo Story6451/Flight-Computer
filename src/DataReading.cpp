@@ -45,95 +45,92 @@ void DataReading::AltitudeCalibration()
 
   for (int i = 0; i < ITER_NO; i++)
   {
-    pressure = baro.readPressureMillibars();
-    altitude = baro.pressureToAltitudeMeters(pressure);
-    altitudeSum += altitude;
+    mPressure = baro.readPressureMillibars();
+    mAltitude = baro.pressureToAltitudeMeters(mPressure);
+    altitudeSum += mAltitude;
   }
 
-  altitudeOffset = altitudeSum / ITER_NO;
+  mAltitudeOffset = altitudeSum / ITER_NO;
 }
 
 void DataReading::ReadAccelerometer() 
 {
     imu.read();
-    AccelXValue = imu.a.x * ACCEL_SENSITIVITY * 9.81 / 1000.0;
-    AccelYValue = imu.a.y * ACCEL_SENSITIVITY * 9.81 / 1000.0;
-    AccelZValue = imu.a.z * ACCEL_SENSITIVITY * 9.81 / 1000.0;
+    mAccelXValue = imu.a.x * ACCEL_SENSITIVITY * 9.81 / 1000.0;
+    mAccelYValue = imu.a.y * ACCEL_SENSITIVITY * 9.81 / 1000.0;
+    mAccelZValue = imu.a.z * ACCEL_SENSITIVITY * 9.81 / 1000.0;
 }
 
 //encapsulating the data
 float DataReading::ReturnAccelerometerX()
 {
-  return AccelXValue;
+  return mAccelXValue;
 }
 float DataReading::ReturnAccelerometerY()
 {
-  return AccelYValue;
+  return mAccelYValue;
 }
 float DataReading::ReturnAccelerometerZ()
 {
-  return AccelZValue;
+  return mAccelZValue;
 }
 float DataReading::ReturnMagnetometerX()
 {
-  return MagnetometerXValue;
+  return mMagnetometerXValue;
 }
 float DataReading::ReturnMagnetometerY()
 {
-  return MagnetometerYValue;
+  return mMagnetometerYValue;
 }
 float DataReading::ReturnMagnetometerZ()
 {
-  return MagnetometerZValue;
+  return mMagnetometerZValue;
 }
 
 void DataReading::ReadMagnetometer() {
     mag.read();
-    MagnetometerXValue = mag.m.x;
-    MagnetometerYValue = mag.m.y;
-    MagnetometerZValue = mag.m.z;
+    mMagnetometerXValue = mag.m.x;
+    mMagnetometerYValue = mag.m.y;
+    mMagnetometerZValue = mag.m.z;
 }
 
 void DataReading::ReadBarometer()
 {
-  pressure = baro.readPressureMillibars();
-  temperature = baro.readTemperatureC();
-  altitude = baro.pressureToAltitudeMeters(pressure);
+  mPressure = baro.readPressureMillibars();
+  mTemperature = baro.readTemperatureC();
+  mAltitude = baro.pressureToAltitudeMeters(mPressure);
 }
 
 float DataReading::ReturnAltitude()
 {
-  return altitude;
+  return mAltitude;
 }
 float DataReading::ReturnPressure()
 {
-  return pressure;
+  return mPressure;
 }
 float DataReading::ReturnTemperature()
 {
-  return temperature;
+  return mTemperature;
 }
 void DataReading::CalculateHeading() 
 {
-  float normAcc = sqrt(AccelXValue * AccelXValue + AccelYValue * AccelYValue + AccelZValue * AccelZValue);
-  AccelXValue /= normAcc;
-  AccelYValue /= normAcc;
-  AccelZValue /= normAcc;
+  float normAcc = sqrt(mAccelXValue * mAccelXValue + mAccelYValue * mAccelYValue + mAccelZValue * mAccelZValue);
+  mAccelXValue /= normAcc;
+  mAccelYValue /= normAcc;
+  mAccelZValue /= normAcc;
 
-  MagnetometerPitch = asin(-AccelXValue);
-  MagnetometerRoll = asin(AccelYValue / cos(MagnetometerPitch));
+  mMagnetometerPitch = asin(-mAccelXValue);
+  mMagnetometerRoll = asin(mAccelYValue / cos(mMagnetometerPitch));
 
-  MagnetometerXCalculated = (MagnetometerXValue * cos(MagnetometerPitch)) + (MagnetometerZValue * sin(MagnetometerPitch));
-  MagnetometerYCalculated = (MagnetometerXValue * sin(MagnetometerRoll) * sin(MagnetometerPitch)) + (MagnetometerYValue * cos(MagnetometerRoll)) - (MagnetometerZValue * sin(MagnetometerRoll) * cos(MagnetometerPitch));
+  mMagnetometerXCalculated = (mMagnetometerXValue * cos(mMagnetometerPitch)) + (mMagnetometerZValue * sin(mMagnetometerPitch));
+  mMagnetometerYCalculated = (mMagnetometerXValue * sin(mMagnetometerRoll) * sin(mMagnetometerPitch)) + (mMagnetometerYValue * cos(mMagnetometerRoll)) - (mMagnetometerZValue * sin(mMagnetometerRoll) * cos(mMagnetometerPitch));
 
-  UncalibratedHeading = atan2(MagnetometerYCalculated, MagnetometerXCalculated);
+  mUncalibratedHeading = atan2(mMagnetometerYCalculated, mMagnetometerXCalculated);
 
-  UncalibratedHeading = UncalibratedHeading * 180 / M_PI;
-  if (UncalibratedHeading < 0) 
+  mUncalibratedHeading = mUncalibratedHeading * 180 / M_PI;
+  if (mUncalibratedHeading < 0) 
   {
-      UncalibratedHeading += 360;
+      mUncalibratedHeading += 360;
   }
-
-  Serial.print("Uncalibrated Heading:");
-  Serial.println(UncalibratedHeading);
 }

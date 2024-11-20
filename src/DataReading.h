@@ -6,21 +6,21 @@ class DataReading
 private:
     const uint32_t ITER_NO = 100;
     uint32_t altIter;
-    float pressure = 0.0; 
-    float altitude = 0.0; 
-    float temperature = 0.0;
-    float altitudeOffset = 0.0;
-    float MagnetometerXValue = 0.0;
-    float MagnetometerYValue = 0.0;
-    float MagnetometerZValue = 0.0;
-    float AccelXValue = 0.0;
-    float AccelYValue = 0.0;
-    float AccelZValue = 0.0;
-    float MagnetometerPitch = 0.0;
-    float MagnetometerRoll = 0.0;
-    float MagnetometerXCalculated = 0.0;
-    float MagnetometerYCalculated = 0.0;
-    float UncalibratedHeading = 0.0;
+    float mPressure = 0.0; 
+    float mAltitude = 0.0; 
+    float mTemperature = 0.0;
+    float mAltitudeOffset = 0.0;
+    float mMagnetometerXValue = 0.0;
+    float mMagnetometerYValue = 0.0;
+    float mMagnetometerZValue = 0.0;
+    float mAccelXValue = 0.0;
+    float mAccelYValue = 0.0;
+    float mAccelZValue = 0.0;
+    float mMagnetometerPitch = 0.0;
+    float mMagnetometerRoll = 0.0;
+    float mMagnetometerXCalculated = 0.0;
+    float mMagnetometerYCalculated = 0.0;
+    float mUncalibratedHeading = 0.0;
 
     static const float ACCEL_SENSITIVITY = 0.061; // in mg/LSB, assuming ±2g full-scale range
 public:
