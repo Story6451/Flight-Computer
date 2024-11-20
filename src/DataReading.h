@@ -4,7 +4,7 @@
 class DataReading
 {
 private:
-    const uint32_t ITER_NO = 1000;
+    const uint32_t ITER_NO = 100;
     uint32_t altIter;
     float pressure = 0.0; 
     float altitude = 0.0; 
@@ -34,6 +34,9 @@ public:
     float ReturnMagnetometerX();
     float ReturnMagnetometerY();
     float ReturnMagnetometerZ();
+    float ReturnAltitude();
+    float ReturnPressure();
+    float ReturnTemperature();
     void ReadMagnetometer();
     void ReadBarometer();
     void CalculateHeight();
