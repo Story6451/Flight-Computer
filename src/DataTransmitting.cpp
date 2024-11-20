@@ -6,8 +6,9 @@
 #include "LoRa-SOLDERED.h"
 
 void DataTransmitting::InitialiseLoRa(){
-    LoRa.setPins(csPin, resetPin, irqPin);// set CS, reset, IRQ pin
-    LoRa.begin(433E6);// Initialize LoRa at 868 MHz
+    Serial.println("Initialising Lora");
+    LoRa.setPins(mCsPin, mResetPin, mIrqPin);// set CS, reset, IRQ pin
+    LoRa.begin(433E6);// Initialize LoRa at 433 MHz
 }
 
 std::vector<uint8_t> DataTransmitting::CreatePacket(uint8_t start_byte){
@@ -48,26 +49,26 @@ DataTransmitting::DataTransmitting()
     std::vector<uint8_t> packet = CreatePacket(0xAA);
 
     // breaking apart and adding all of the data to the packet
-    Parse32Bit(packet, pressure);
-    Parse16Bit(packet, temperature); 
+    Parse32Bit(packet, mPressure);
+    Parse16Bit(packet, mTemperature); 
 
-    for (int16_t value : acceleration){
+    for (int16_t value : mAcceleration){
         Parse16Bit(packet, value);
     }
-    for (int16_t value : magneticFluxDensityDividedBy100){
+    for (int16_t value : mMagneticFluxDensityDividedBy100){
         Parse32Bit(packet, value);
     }
 
-    for (int16_t value : rotation){
+    for (int16_t value : mRotation){
         Parse16Bit(packet, value);
     }
 
-    for (int16_t gpsCoordinate : gpsCoordinates){
+    for (int16_t gpsCoordinate : mGpsCoordinates){
         Parse16Bit(packet, gpsCoordinate);
     }
 
-    Parse16Bit(packet, velocityDividedBy100);
-    Parse16Bit(packet, altitude);
+    Parse16Bit(packet, mVelocityDividedBy100);
+    Parse16Bit(packet, mAltitude);
 
     // calculating and adding the checksum to the packet
     uint16_t checksum = CalculateChecksum(packet);
