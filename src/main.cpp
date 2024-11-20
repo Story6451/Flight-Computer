@@ -28,5 +28,7 @@ void loop()
 {
   Serial.println("test");
   // put your main code here, to run repeatedly:
-  Serial.print(dataReader.ReadAccelerometer());
+  Serial.print(dataReader.ReturnAccelerometerX());
+  Serial.print(dataReader.ReturnAccelerometerY());
+  Serial.print(dataReader.ReturnAccelerometerZ());
 }

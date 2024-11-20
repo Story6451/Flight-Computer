@@ -67,6 +67,19 @@ void DataReading::ReadAccelerometer() {
     AccelZValue = imu.a.z;
 }
 
+float DataReading::ReturnAccelerometerX()
+{
+  return AccelXValue;
+}
+float DataReading::ReturnAccelerometerY()
+{
+  return AccelYValue;
+}
+float DataReading::ReturnAccelerometerZ()
+{
+  return AccelZValue;
+}
+
 void DataReading::ReadMagnetometer() {
     mag.read();
     MagnetometerXValue = mag.m.x;
@@ -90,7 +103,7 @@ void DataReading::ReadBarometer()
 
 void DataReading::CalculateHeight()
 {
-  
+
 }
 
 void DataReading::CalculateHeading() 

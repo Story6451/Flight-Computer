@@ -26,6 +26,9 @@ public:
     void Begin();
     void AltitudeCalibration();//this doesnt work, it crashes, fix
     void ReadAccelerometer();
+    float ReturnAccelerometerX();
+    float ReturnAccelerometerY();
+    float ReturnAccelerometerZ();
     void ReadMagnetometer();
     void ReadBarometer();
     void CalculateHeight();
