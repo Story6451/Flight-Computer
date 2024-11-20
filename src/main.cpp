@@ -7,7 +7,13 @@
 
 DataLogging dataLogger;
 DataReading dataReader;
+<<<<<<< HEAD
 DataTransmitting dataTransmitter;
+=======
+//DataTransmitting dataTransmitter;
+//git pull origin main --no-rebase
+
+>>>>>>> e12323d39a5fa143c6ab81d3944de817f8648fef
 
 EKF ekf;
 
@@ -23,6 +29,7 @@ void setup()
   dataTransmitter.InitialiseLoRa();
 
   //ekf.initkalman();
+  ekf.initkalman();
 }
 
 void loop() 
@@ -63,6 +70,14 @@ void loop()
 
   Serial.print("Temperature: ");
   Serial.println(dataReader.ReturnTemperature());
+
+  float accel = -dataReader.ReturnAccelerometerX();
+  ekf.predict(accel);
+
+  ekf.updateBaro(dataReader.ReturnAltitude());
+
+  Serial.print("Kalman Position: ");
+  Serial.println(ekf.getKalmanPosition());
 
   Serial.println();
   delay(100);
