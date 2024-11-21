@@ -15,11 +15,7 @@ public:
     void predict(float accel);
     void updateBaro(float altitude);
     //void updateGNSS();
-
     float getKalmanPosition();
     float getKalmanVelocity();
     float getKalmanGain();
-
-
-
 };
