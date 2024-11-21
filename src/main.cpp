@@ -17,7 +17,7 @@ void setup()
   Wire.begin();
 
   //dataLogger.Begin();
-  //dataReader.Begin();
+  dataReader.Begin();
   //dataReader.AltitudeCalibration();
   // put your setup code here, to run once:
   dataTransmitter.Begin();
