@@ -1,8 +1,8 @@
 #include <DataTransmitting.h>
-#include <vector>
-#include <cstdint>
+//#include <vector>
+//#include <cstdint>
 #define LORA		//Specify that module will be used for LoRa to LoRa communication
-#include <SPI.h>
+//#include <SPI.h>
 #include "LoRa-SOLDERED.h"
 
 

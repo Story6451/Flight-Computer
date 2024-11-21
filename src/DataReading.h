@@ -1,5 +1,4 @@
 #include <Arduino.h>
-#include <LPS.h>
 
 class DataReading
 {
