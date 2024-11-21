@@ -41,6 +41,7 @@ void DataReading::Begin()
 
 void DataReading::AltitudeCalibration()
 {
+  /*
   float altitudeSum = 0;
 
   for (int i = 0; i < ITER_NO; i++)
@@ -51,6 +52,14 @@ void DataReading::AltitudeCalibration()
   }
 
   mAltitudeOffset = altitudeSum / ITER_NO;
+  */
+ float pressureSum = 0;
+ for (int i = 0; i < ITER_NO; i++)
+ {
+  pressureSum += baro.readPressureMillibars();
+ }
+
+ mGroundPressure = pressureSum / ITER_NO;
 }
 
 void DataReading::ReadAccelerometer() 
@@ -98,7 +107,7 @@ void DataReading::ReadBarometer()
 {
   mPressure = baro.readPressureMillibars();
   mTemperature = baro.readTemperatureC();
-  mAltitude = baro.pressureToAltitudeMeters(mPressure);
+  mAltitude = baro.pressureToAltitudeMeters(mPressure, mGroundPressure);
 }
 
 float DataReading::ReturnAltitude()

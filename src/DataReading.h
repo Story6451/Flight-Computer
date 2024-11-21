@@ -7,6 +7,7 @@ private:
     const uint32_t ITER_NO = 100;
     uint32_t altIter;
     float mPressure = 0.0; 
+    float mGroundPressure = 0.0;
     float mAltitude = 0.0; 
     float mTemperature = 0.0;
     float mAltitudeOffset = 0.0;
