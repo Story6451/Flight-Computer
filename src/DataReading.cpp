@@ -34,25 +34,13 @@ void DataReading::Begin()
   }
   imu.enableDefault();
 
-  //AltitudeCalibration();
+  AltitudeCalibration();
 
   Serial.println("Calibration complete");
 }
 
 void DataReading::AltitudeCalibration()
 {
-  /*
-  float altitudeSum = 0;
-
-  for (int i = 0; i < ITER_NO; i++)
-  {
-    mPressure = baro.readPressureMillibars();
-    mAltitude = baro.pressureToAltitudeMeters(mPressure);
-    altitudeSum += mAltitude;
-  }
-
-  mAltitudeOffset = altitudeSum / ITER_NO;
-  */
  float pressureSum = 0;
  for (int i = 0; i < ITER_NO; i++)
  {

@@ -9,7 +9,7 @@
 void DataTransmitting::Begin()
 {
     Serial.println("Initialising Lora");
-    LoRa.setPins(mCsPin, mResetPin, mIrqPin);// set CS, reset, IRQ pin
+    LoRa.setPins(CS_PIN, RESET_PIN, IRQ_PIN);// set CS, reset, IRQ pin
     LoRa.begin(433E6);// Initialize LoRa at 433 MHz
 
 }
