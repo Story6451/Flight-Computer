@@ -3,7 +3,11 @@
 class DataReading
 {
 private:
+    const float ACCEL_SENSITIVITY = 0.061; // in mg/LSB, assuming ±2g full-scale range
     const uint32_t ITER_NO = 100;
+
+    const uint32_t GPS_BAUD = 4800;
+
     //uint32_t altIter;
     float mPressure = 0.0; 
     float mGroundPressure = 0.0;
@@ -22,12 +26,12 @@ private:
     float mMagnetometerYCalculated = 0.0;
     float mUncalibratedHeading = 0.0;
 
-    static const float ACCEL_SENSITIVITY = 0.061; // in mg/LSB, assuming ±2g full-scale range
 public:
     DataReading(/* args */); 
     void Begin();
     void AltitudeCalibration();//this doesnt work, it crashes, fix
     void ReadAccelerometer();
+    void ReadGPSStream();
     float ReturnAccelerometerX();
     float ReturnAccelerometerY();
     float ReturnAccelerometerZ();

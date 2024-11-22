@@ -2,11 +2,18 @@
 #include <LIS3MDL.h>
 #include <LSM6.h>
 #include <LPS.h>
+#include <TinyGPSPlus.h>
+#include <SoftwareSerial.h>
+
+//this is a one off exception do not follow the proceeding two lines by example else ILL HUNT YOU
+const uint8_t RX_PIN = 4;
+const uint8_t TX_PIN = 3;
 
 LPS baro;
 LIS3MDL mag;
 LSM6 imu;
-
+TinyGPSPlus gps;
+SoftwareSerial ss(RX_PIN, TX_PIN);
 
 DataReading::DataReading()
 {  
@@ -34,6 +41,11 @@ void DataReading::Begin()
   }
   imu.enableDefault();
 
+  /*
+  gps setup code goes here
+  */
+  ss.begin(GPS_BAUD);
+  
   AltitudeCalibration();
 
   Serial.println("Calibration complete");
@@ -56,6 +68,18 @@ void DataReading::ReadAccelerometer()
     mAccelXValue = imu.a.x * ACCEL_SENSITIVITY * 9.81 / 1000.0;
     mAccelYValue = imu.a.y * ACCEL_SENSITIVITY * 9.81 / 1000.0;
     mAccelZValue = imu.a.z * ACCEL_SENSITIVITY * 9.81 / 1000.0;
+}
+
+void DataReading::ReadGPSStream()
+{
+  while (ss.available() > 0)
+  {
+
+    if (gps.encode(ss.read()))
+    {
+      
+    }
+  }
 }
 
 //encapsulating the data
