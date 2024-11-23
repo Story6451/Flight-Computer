@@ -114,10 +114,6 @@ float DataReading::ReturnAccelerometerX()
 {
   return mAccelXValue;
 }
-float DataReading::ReturnAccelerometerX()
-{
-  return mAccelXValue;
-}
 float DataReading::ReturnAccelerometerY()
 {
   return mAccelYValue;
