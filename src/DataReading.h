@@ -25,6 +25,12 @@ private:
     float mMagnetometerXCalculated = 0.0;
     float mMagnetometerYCalculated = 0.0;
     float mUncalibratedHeading = 0.0;
+    float mGPSAltitude = 0.0;
+    float mGPSVelocity = 0.0;
+    float mLatitude = 0.0;
+    float mLongitude = 0.0;
+    uint32_t mNumberOfSatellites = 0;
+
 
 public:
     DataReading(/* args */); 
@@ -32,6 +38,15 @@ public:
     void AltitudeCalibration();//this doesnt work, it crashes, fix
     void ReadAccelerometer();
     void ReadGPSStream();
+    void GPSStreamToData();
+    void ReadMagnetometer();
+    void ReadBarometer();
+    void CalculateHeading();
+    float ReturnLatitude();
+    float ReturnLongitude();
+    uint32_t ReturnSatellitesConnected();
+    float ReturnGPSAltitude();
+    float ReturnGPSVelocity();
     float ReturnAccelerometerX();
     float ReturnAccelerometerY();
     float ReturnAccelerometerZ();
@@ -41,8 +56,5 @@ public:
     float ReturnAltitude();
     float ReturnPressure();
     float ReturnTemperature();
-    void ReadMagnetometer();
-    void ReadBarometer();
-    void CalculateHeading();
 };
 

@@ -72,17 +72,48 @@ void DataReading::ReadAccelerometer()
 
 void DataReading::ReadGPSStream()
 {
-  while (ss.available() > 0)
+  uint64_t start = millis();
+  do 
   {
+    while (ss.available())
+      gps.encode(ss.read());
+  } while (millis() - start < 100);
+}
 
-    if (gps.encode(ss.read()))
-    {
-      
-    }
-  }
+void DataReading::GPSStreamToData()
+{
+  mGPSAltitude = gps.altitude.meters();
+  mLatitude = gps.location.lat();
+  mLongitude = gps.location.lng();
+  mGPSVelocity = gps.speed.mps();
+  mNumberOfSatellites = gps.satellites.value();
 }
 
 //encapsulating the data
+float DataReading::ReturnLatitude()
+{
+  return mLatitude;
+}
+float DataReading::ReturnLongitude()
+{
+  return mLongitude;
+}
+uint32_t DataReading::ReturnSatellitesConnected()
+{
+  return mNumberOfSatellites;
+}
+float DataReading::ReturnGPSAltitude()
+{
+  return mGPSAltitude;
+}
+float DataReading::ReturnGPSVelocity()
+{
+  return mGPSVelocity;
+}
+float DataReading::ReturnAccelerometerX()
+{
+  return mAccelXValue;
+}
 float DataReading::ReturnAccelerometerX()
 {
   return mAccelXValue;
