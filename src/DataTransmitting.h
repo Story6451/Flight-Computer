@@ -29,12 +29,12 @@ public:
     std::vector<uint8_t> CreatePacket(uint8_t start_byte);
 
     // breaks apart any 32bit data into 8bit chunks and adds it to the packet
-    void Parse32Bit(std::vector<uint8_t> packet, uint32_t data);
+    void Parse32Bit(std::vector<uint8_t>& packet, uint32_t data);
 
     // breaks apart any 16bit data into 8bit chunks and adds it to the packet
-    void Parse16Bit(std::vector<uint8_t> packet, uint16_t data);
+    void Parse16Bit(std::vector<uint8_t>& packet, uint16_t data);
 
-    uint16_t CalculateChecksum(std::vector<uint8_t> packet);
+    uint16_t CalculateChecksum(std::vector<uint8_t>& packet);
 
     void Transmit();
 
