@@ -18,18 +18,12 @@ void setup()
 
   //dataLogger.Begin();
   dataReader.Begin();
-  //dataReader.AltitudeCalibration();
-  // put your setup code here, to run once:
   dataTransmitter.Begin();
-
   ekf.initkalman();
 }
 
 void loop() 
 {
-  //Serial.println("test");
-  // put your main code here, to run repeatedly:
-
   //Accelerometer
   dataReader.ReadAccelerometer();
   Serial.print("Accel X: ");

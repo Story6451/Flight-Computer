@@ -1,15 +1,15 @@
 #include <DataTransmitting.h>
-#include <vector>
-#include <cstdint>
+//#include <vector>
+//#include <cstdint>
 #define LORA		//Specify that module will be used for LoRa to LoRa communication
-#include <SPI.h>
+//#include <SPI.h>
 #include "LoRa-SOLDERED.h"
 
 
 void DataTransmitting::Begin()
 {
     Serial.println("Initialising Lora");
-    LoRa.setPins(mCsPin, mResetPin, mIrqPin);// set CS, reset, IRQ pin
+    LoRa.setPins(CS_PIN, RESET_PIN, IRQ_PIN);// set CS, reset, IRQ pin
     LoRa.begin(433E6);// Initialize LoRa at 433 MHz
 
 }

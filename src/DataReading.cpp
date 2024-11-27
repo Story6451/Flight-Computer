@@ -2,11 +2,18 @@
 #include <LIS3MDL.h>
 #include <LSM6.h>
 #include <LPS.h>
+#include <TinyGPSPlus.h>
+#include <SoftwareSerial.h>
+
+//this is a one off exception do not follow the proceeding two lines by example else ILL HUNT YOU
+const uint8_t RX_PIN = 4;
+const uint8_t TX_PIN = 3;
 
 LPS baro;
 LIS3MDL mag;
 LSM6 imu;
-
+TinyGPSPlus gps;
+SoftwareSerial ss(RX_PIN, TX_PIN);
 
 DataReading::DataReading()
 {  
@@ -34,23 +41,25 @@ void DataReading::Begin()
   }
   imu.enableDefault();
 
-  //AltitudeCalibration();
+  /*
+  gps setup code goes here
+  */
+  ss.begin(GPS_BAUD);
+  
+  AltitudeCalibration();
 
   Serial.println("Calibration complete");
 }
 
 void DataReading::AltitudeCalibration()
 {
-  float altitudeSum = 0;
+ float pressureSum = 0;
+ for (int i = 0; i < ITER_NO; i++)
+ {
+  pressureSum += baro.readPressureMillibars();
+ }
 
-  for (int i = 0; i < ITER_NO; i++)
-  {
-    mPressure = baro.readPressureMillibars();
-    mAltitude = baro.pressureToAltitudeMeters(mPressure);
-    altitudeSum += mAltitude;
-  }
-
-  mAltitudeOffset = altitudeSum / ITER_NO;
+ mGroundPressure = pressureSum / ITER_NO;
 }
 
 void DataReading::ReadAccelerometer() 
@@ -61,7 +70,46 @@ void DataReading::ReadAccelerometer()
     mAccelZValue = imu.a.z * ACCEL_SENSITIVITY * 9.81 / 1000.0;
 }
 
+void DataReading::ReadGPSStream()
+{
+  uint64_t start = millis();
+  do 
+  {
+    while (ss.available())
+      gps.encode(ss.read());
+  } while (millis() - start < 100);
+}
+
+void DataReading::GPSStreamToData()
+{
+  mGPSAltitude = gps.altitude.meters();
+  mLatitude = gps.location.lat();
+  mLongitude = gps.location.lng();
+  mGPSVelocity = gps.speed.mps();
+  mNumberOfSatellites = gps.satellites.value();
+}
+
 //encapsulating the data
+float DataReading::ReturnLatitude()
+{
+  return mLatitude;
+}
+float DataReading::ReturnLongitude()
+{
+  return mLongitude;
+}
+uint32_t DataReading::ReturnSatellitesConnected()
+{
+  return mNumberOfSatellites;
+}
+float DataReading::ReturnGPSAltitude()
+{
+  return mGPSAltitude;
+}
+float DataReading::ReturnGPSVelocity()
+{
+  return mGPSVelocity;
+}
 float DataReading::ReturnAccelerometerX()
 {
   return mAccelXValue;
@@ -98,7 +146,7 @@ void DataReading::ReadBarometer()
 {
   mPressure = baro.readPressureMillibars();
   mTemperature = baro.readTemperatureC();
-  mAltitude = baro.pressureToAltitudeMeters(mPressure);
+  mAltitude = baro.pressureToAltitudeMeters(mPressure, mGroundPressure);
 }
 
 float DataReading::ReturnAltitude()
