@@ -16,7 +16,7 @@ TinyGPSPlus gps;
 SoftwareSerial ss(RX_PIN, TX_PIN);
 
 DataReading::DataReading()
-{
+{  
 }
 
 void DataReading::Begin()
@@ -55,14 +55,14 @@ void DataReading::AltitudeCalibration()
 {
  float pressureSum = 0;
  for (int i = 0; i < ITER_NO; i++)
-  {
+ {
   pressureSum += baro.readPressureMillibars();
-  }
+ }
 
  mGroundPressure = pressureSum / ITER_NO;
 }
 
-void DataReading::ReadAccelerometer()
+void DataReading::ReadAccelerometer() 
 {
     imu.read();
     mAccelXValue = imu.a.x * ACCEL_SENSITIVITY * 9.81 / 1000.0;

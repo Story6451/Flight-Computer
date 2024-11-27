@@ -29,7 +29,7 @@ void DataTransmitting::LogData(uint32_t pressure, uint16_t temperature, std::vec
 
 void DataTransmitting::Transmit()
 {
-    // (list of all data to recieve and in which format)
+// (list of all data to recieve and in which format)
     //uint32_t pressure, uint16_t temperature, std::vector<int16_t> acceleration, 
     //std::vector<int16_t> magneticFluxDensity, std::vector<int16_t> rotation, std::vector<int16_t> gpsCoordinates,
     //int16_t velocity/100, uint16_t altitude 
@@ -67,7 +67,7 @@ void DataTransmitting::Transmit()
     //for (uint8_t value : packet){
     //    Serial.println(value);
     //}
-
+    
     // write to LoRa
     // Send packet
     LoRa.beginPacket(); //Begin sending
