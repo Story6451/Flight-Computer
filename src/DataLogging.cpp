@@ -2,10 +2,6 @@
 #include <DataLogging.h>
 #include <SD.h>
 
-#include "DataReading.cpp"
-
-int milli = 0;
-
 DataLogging::DataLogging()
 {
 
@@ -22,13 +18,14 @@ void DataLogging::Begin()
     Serial.println("3. did you change the chipSelect pin to match your shield or module?");
     Serial.println("Note: press reset button on the board and reopen this Serial Monitor after fixing your issue!");
   }
+
+  File dataFile = SD.open("datalog.csv", FILE_WRITE);
+  dataFile.println("State,pressure,altitude,temperature,altitudeOffset,MagnetometerXValue,MagnetometerYValue,MagnetometerZValue,AccelXValue,AccelYValue,AccelZValue,MagnetometerPitch,MagnetometerRoll,MagnetometerXCalculated,MagnetometerYCalculated,UncalibratedHeading");
+  dataFile.close();
 }
 void DataLogging::LogData(){ 
 
   File dataFile = SD.open("datalog.csv", FILE_WRITE);
-  dataFile.println("State,pressure,altitude,temperature,altitudeOffset,MagnetometerXValue,MagnetometerYValue,MagnetometerZValue,AccelXValue,AccelYValue,AccelZValue,MagnetometerPitch,MagnetometerRoll,MagnetometerXCalculated,MagnetometerYCalculated,UncalibratedHeading");
-
-
 
   if (dataFile) {
 
@@ -71,13 +68,10 @@ void DataLogging::LogData(){
 
       mLastTime = millis();      
 
-    }
-    else{
-      dataFile.close();
-    }
-            
+    }       
   }
   else{
     Serial.println("Error in opening the file");
   }
+  dataFile.close();
 }
