@@ -24,6 +24,7 @@ void setup()
 
 void loop() 
 {
+  /*
   //Accelerometer
   dataReader.ReadAccelerometer();
   Serial.print("Accel X: ");
@@ -67,6 +68,7 @@ void loop()
   Serial.println(ekf.getKalmanPosition());
 
   Serial.println();
+  */
   dataTransmitter.Transmit();
   delay(100);
 }
