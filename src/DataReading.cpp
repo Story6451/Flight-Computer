@@ -1,19 +1,31 @@
 #include <DataReading.h>
 #include <LIS3MDL.h>
 #include <LSM6.h>
+#include <LPS.h>
+#include <TinyGPSPlus.h>
+#include <SoftwareSerial.h>
 
+//this is a one off exception do not follow the proceeding two lines by example else ILL HUNT YOU
+const uint8_t RX_PIN = 4;
+const uint8_t TX_PIN = 3;
+
+LPS baro;
 LIS3MDL mag;
 LSM6 imu;
-
+TinyGPSPlus gps;
+SoftwareSerial ss(RX_PIN, TX_PIN);
 
 DataReading::DataReading()
 {
-  if (!ps.init())
+}
+
+void DataReading::Begin()
+{
+  if (!baro.init())
   {
     Serial.println("Failed to autodetect pressure sensor!");
-    while (1);
   }
-  ps.enableDefault();
+  baro.enableDefault();
 
   if (!mag.init()) 
   {
@@ -29,56 +41,144 @@ DataReading::DataReading()
   }
   imu.enableDefault();
 
+  /*
+  gps setup code goes here
+  */
+  ss.begin(GPS_BAUD);
+  
   AltitudeCalibration();
 
   Serial.println("Calibration complete");
-    
 }
 
 void DataReading::AltitudeCalibration()
 {
-  float altitudeSum = 0;
-
-  for (altIter = 0; altIter < ITER_NO; altIter++)
+ float pressureSum = 0;
+ for (int i = 0; i < ITER_NO; i++)
   {
-    pressure = ps.readPressureMillibars();
-    altitude = ps.pressureToAltitudeMeters(pressure);
-    altitudeSum += altitude;
+  pressureSum += baro.readPressureMillibars();
   }
 
-  altitudeOffset = altitudeSum / ITER_NO;
+ mGroundPressure = pressureSum / ITER_NO;
 }
 
 void DataReading::ReadAccelerometer()
 {
-  AccelXValue = imu.a.x;
-  AccelYValue = imu.a.y;
-  AccelZValue = imu.a.z;
-}
-void DataReading::ReadMagnetometer()
-{
-  mag.read();
-  MagnetometerXValue = mag.m.x;
-  MagnetometerYValue = mag.m.y;
-  MagnetometerZValue = mag.m.z;
-  // Output raw x, y, z values for magnetometer
-  Serial.println("MAGNETOMETER READINGS");
-  Serial.print("Magnetometer: X=");
-  Serial.print(MagnetometerXValue);
-  Serial.print(" Y=");
-  Serial.print(MagnetometerYValue);
-  Serial.print(" Z=");
-  Serial.println(MagnetometerZValue);
+    imu.read();
+    mAccelXValue = imu.a.x * ACCEL_SENSITIVITY * 9.81 / 1000.0;
+    mAccelYValue = imu.a.y * ACCEL_SENSITIVITY * 9.81 / 1000.0;
+    mAccelZValue = imu.a.z * ACCEL_SENSITIVITY * 9.81 / 1000.0;
 }
 
-void DataReading::CalculateHeading()
+void DataReading::ReadGPSStream()
 {
-  MagnetometerPitch = atan(AccelXValue / sqrt(pow(AccelYValue,2)+pow(AccelZValue,2)));
-  MagnetometerRoll = atan(-AccelYValue / AccelZValue);
-  MagnetometerXCalculated = (MagnetometerXValue * cos(MagnetometerPitch)) + (MagnetometerZValue * sin(MagnetometerPitch));
-  MagnetometerYCalculated = ((MagnetometerXValue * sin(MagnetometerPitch) * sin(MagnetometerRoll)) + (MagnetometerYValue * cos(MagnetometerRoll)) - (MagnetometerZValue * sin(MagnetometerRoll) * cos(MagnetometerPitch)));
-  UncalibratedHeading = atan(MagnetometerYCalculated / MagnetometerXCalculated);
-  Serial.print("Uncalibrated Heading:");
-  Serial.println(UncalibratedHeading);
+  uint64_t start = millis();
+  do 
+  {
+    while (ss.available())
+      gps.encode(ss.read());
+  } while (millis() - start < 100);
 }
-    
+
+void DataReading::GPSStreamToData()
+{
+  mGPSAltitude = gps.altitude.meters();
+  mLatitude = gps.location.lat();
+  mLongitude = gps.location.lng();
+  mGPSVelocity = gps.speed.mps();
+  mNumberOfSatellites = gps.satellites.value();
+}
+
+//encapsulating the data
+float DataReading::ReturnLatitude()
+{
+  return mLatitude;
+}
+float DataReading::ReturnLongitude()
+{
+  return mLongitude;
+}
+uint32_t DataReading::ReturnSatellitesConnected()
+{
+  return mNumberOfSatellites;
+}
+float DataReading::ReturnGPSAltitude()
+{
+  return mGPSAltitude;
+}
+float DataReading::ReturnGPSVelocity()
+{
+  return mGPSVelocity;
+}
+float DataReading::ReturnAccelerometerX()
+{
+  return mAccelXValue;
+}
+float DataReading::ReturnAccelerometerY()
+{
+  return mAccelYValue;
+}
+float DataReading::ReturnAccelerometerZ()
+{
+  return mAccelZValue;
+}
+float DataReading::ReturnMagnetometerX()
+{
+  return mMagnetometerXValue;
+}
+float DataReading::ReturnMagnetometerY()
+{
+  return mMagnetometerYValue;
+}
+float DataReading::ReturnMagnetometerZ()
+{
+  return mMagnetometerZValue;
+}
+
+void DataReading::ReadMagnetometer() {
+    mag.read();
+    mMagnetometerXValue = mag.m.x;
+    mMagnetometerYValue = mag.m.y;
+    mMagnetometerZValue = mag.m.z;
+}
+
+void DataReading::ReadBarometer()
+{
+  mPressure = baro.readPressureMillibars();
+  mTemperature = baro.readTemperatureC();
+  mAltitude = baro.pressureToAltitudeMeters(mPressure, mGroundPressure);
+}
+
+float DataReading::ReturnAltitude()
+{
+  return mAltitude;
+}
+float DataReading::ReturnPressure()
+{
+  return mPressure;
+}
+float DataReading::ReturnTemperature()
+{
+  return mTemperature;
+}
+void DataReading::CalculateHeading() 
+{
+  float normAcc = sqrt(mAccelXValue * mAccelXValue + mAccelYValue * mAccelYValue + mAccelZValue * mAccelZValue);
+  mAccelXValue /= normAcc;
+  mAccelYValue /= normAcc;
+  mAccelZValue /= normAcc;
+
+  mMagnetometerPitch = asin(-mAccelXValue);
+  mMagnetometerRoll = asin(mAccelYValue / cos(mMagnetometerPitch));
+
+  mMagnetometerXCalculated = (mMagnetometerXValue * cos(mMagnetometerPitch)) + (mMagnetometerZValue * sin(mMagnetometerPitch));
+  mMagnetometerYCalculated = (mMagnetometerXValue * sin(mMagnetometerRoll) * sin(mMagnetometerPitch)) + (mMagnetometerYValue * cos(mMagnetometerRoll)) - (mMagnetometerZValue * sin(mMagnetometerRoll) * cos(mMagnetometerPitch));
+
+  mUncalibratedHeading = atan2(mMagnetometerYCalculated, mMagnetometerXCalculated);
+
+  mUncalibratedHeading = mUncalibratedHeading * 180 / M_PI;
+  if (mUncalibratedHeading < 0) 
+  {
+      mUncalibratedHeading += 360;
+  }
+}
