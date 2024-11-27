@@ -14,6 +14,19 @@ void DataTransmitting::Begin()
 
 }
 
+void DataTransmitting::LogData(uint32_t pressure, uint16_t temperature, std::vector<int16_t> acceleration, std::vector<uint32_t> magneticFluxDensity, std::vector<int16_t> rotation, std::vector<int16_t> GpsCoordinates, int16_t velocity, uint16_t altitude){
+    mPressure = pressure;
+    mTemperature = temperature;
+    mAcceleration = acceleration;
+    for (int i=0; i<magneticFluxDensity.size(); i++){
+        mMagneticFluxDensityTimes100[i] = magneticFluxDensity[i]*100;
+    }
+    mRotation = rotation;
+    mGpsCoordinates = GpsCoordinates;
+    mVelocityDividedBy100 = velocity/100;
+    mAltitude = altitude;
+}
+
 void DataTransmitting::Transmit()
 {
 // (list of all data to recieve and in which format)
@@ -31,7 +44,7 @@ void DataTransmitting::Transmit()
     for (int16_t value : mAcceleration){
         Parse16Bit(packet, value);
     }
-    for (int16_t value : mMagneticFluxDensityDividedBy100){
+    for (int16_t value : mMagneticFluxDensityTimes100){
         Parse32Bit(packet, value);
     }
 
