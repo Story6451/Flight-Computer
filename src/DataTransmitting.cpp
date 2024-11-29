@@ -79,6 +79,9 @@ void DataTransmitting::Transmit()
      
         Serial.println("Sent Packet");
     }
+    else{
+        
+    }
 }
 
 std::vector<uint8_t> DataTransmitting::CreatePacket(uint8_t start_byte){
