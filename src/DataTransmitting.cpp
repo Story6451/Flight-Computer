@@ -36,6 +36,7 @@ void DataTransmitting::Transmit()
      
     // creating the packet and the start byte
     if ((millis() - lastTimeSent) > sendingInterval){
+        lastTimeSent = millis();
         std::vector<uint8_t> packet = CreatePacket(0xAA);
 
         // breaking apart and adding all of the data to the packet
@@ -63,6 +64,7 @@ void DataTransmitting::Transmit()
         // calculating and adding the checksum to the packet
         uint16_t checksum = CalculateChecksum(packet);
         packet.push_back(checksum);
+        packet.push_back(0xBB);
 
         // for UI tests
         //for (uint8_t value : packet){
@@ -74,13 +76,22 @@ void DataTransmitting::Transmit()
         LoRa.beginPacket(); //Begin sending
         // for (uint8_t value : packet){
         // }
-        LoRa.write(packet.data(), packet.size());  
+        LoRa.write(packet.data(), packet.size());
         LoRa.endPacket(); //End sending
      
         Serial.println("Sent Packet");
     }
     else{
-        
+        Serial.println("Recieving Mode");
+        int packetSize = LoRa.parsePacket();
+        if (packetSize)
+        {
+            while(LoRa.available())
+            {
+                data[dataPos] = (char)LoRa.read();
+                Serial.write(data, packetSize);
+            }
+        }
     }
 }
 
