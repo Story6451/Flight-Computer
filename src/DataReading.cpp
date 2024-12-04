@@ -6,8 +6,8 @@
 #include <SoftwareSerial.h>
 
 //this is a one off exception do not follow the proceeding two lines by example else ILL HUNT YOU
-const uint8_t RX_PIN = 4;
-const uint8_t TX_PIN = 3;
+const uint8_t RX_PIN = 0;
+const uint8_t TX_PIN = 1;
 
 LPS baro;
 LIS3MDL mag;
