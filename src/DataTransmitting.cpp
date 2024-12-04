@@ -37,6 +37,7 @@ void DataTransmitting::Transmit()
     // creating the packet and the start byte
     if ((millis() - lastTimeSent) > sendingInterval){
         lastTimeSent = millis();
+        //sendingInterval = random(400) + 100;
         std::vector<uint8_t> packet = CreatePacket(0xAA);
 
         // breaking apart and adding all of the data to the packet
@@ -91,6 +92,7 @@ void DataTransmitting::Transmit()
                 data[dataPos] = (char)LoRa.read();
                 Serial.write(data, packetSize);
             }
+            delay(1000);
         }
     }
 }
