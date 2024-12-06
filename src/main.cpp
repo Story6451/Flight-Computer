@@ -14,12 +14,11 @@ EKF ekf;
 void setup() 
 {
   Serial.begin(9600);
-  Wire.begin();
-
+  //Wire.begin();
   //dataLogger.Begin();
-  dataReader.Begin();
+  //dataReader.Begin();
   dataTransmitter.Begin();
-  ekf.initkalman();
+  //ekf.initkalman();
 }
 
 void loop() 
@@ -69,6 +68,7 @@ void loop()
 
   Serial.println();
   */
+  Serial.println("test");
   dataTransmitter.Transmit();
   delay(100);
 }
