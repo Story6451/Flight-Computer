@@ -37,6 +37,8 @@ void DataTransmitting::LogData(uint32_t pressure, uint16_t temperature, std::vec
     mAltitude = altitude;
 }
 
+bool isSent = false;
+
 void DataTransmitting::Transmit()
 {
     if (millis() - lastTimeSent > 1000)
@@ -64,7 +66,16 @@ void DataTransmitting::Transmit()
     //     // breaking apart and adding all of the data to the packet
     //     Parse32Bit(packet, mPressure);
     //     Parse16Bit(packet, mTemperature); 
+    //     // breaking apart and adding all of the data to the packet
+    //     Parse32Bit(packet, mPressure);
+    //     Parse16Bit(packet, mTemperature); 
 
+    //     for (int16_t value : mAcceleration){
+    //         Parse16Bit(packet, value);
+    //     }
+    //     for (int16_t value : mMagneticFluxDensityTimes100){
+    //         Parse32Bit(packet, value);
+    //     }
     //     for (int16_t value : mAcceleration){
     //         Parse16Bit(packet, value);
     //     }
@@ -75,14 +86,26 @@ void DataTransmitting::Transmit()
     //     for (int16_t value : mRotation){
     //         Parse16Bit(packet, value);
     //     }
+    //     for (int16_t value : mRotation){
+    //         Parse16Bit(packet, value);
+    //     }
 
+    //     for (int16_t gpsCoordinate : mGpsCoordinates){
+    //         Parse16Bit(packet, gpsCoordinate);
+    //     }
     //     for (int16_t gpsCoordinate : mGpsCoordinates){
     //         Parse16Bit(packet, gpsCoordinate);
     //     }
 
     //     Parse16Bit(packet, mVelocityDividedBy100);
     //     Parse16Bit(packet, mAltitude);
+    //     Parse16Bit(packet, mVelocityDividedBy100);
+    //     Parse16Bit(packet, mAltitude);
 
+    //     // calculating and adding the checksum to the packet
+    //     uint16_t checksum = CalculateChecksum(packet);
+    //     packet.push_back(checksum);
+    //     packet.push_back(0xBB);
     //     // calculating and adding the checksum to the packet
     //     uint16_t checksum = CalculateChecksum(packet);
     //     packet.push_back(checksum);
