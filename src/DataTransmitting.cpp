@@ -27,6 +27,8 @@ void DataTransmitting::LogData(uint32_t pressure, uint16_t temperature, std::vec
     mAltitude = altitude;
 }
 
+bool isSent = false;
+
 void DataTransmitting::Transmit()
 {
 // (list of all data to recieve and in which format)
@@ -35,65 +37,79 @@ void DataTransmitting::Transmit()
     //int16_t velocity/100, uint16_t altitude 
      
     // creating the packet and the start byte
-    if ((millis() - lastTimeSent) > sendingInterval){
-        lastTimeSent = millis();
-        //sendingInterval = random(400) + 100;
-        std::vector<uint8_t> packet = CreatePacket(0xAA);
+    // if ((millis() - lastTimeSent) > sendingInterval){
+    // if (!isSent){
+    //     lastTimeSent = millis();
+    //     //sendingInterval = random(400) + 100;
+    //     std::vector<uint8_t> packet = CreatePacket(0xAA);
 
-        // breaking apart and adding all of the data to the packet
-        Parse32Bit(packet, mPressure);
-        Parse16Bit(packet, mTemperature); 
+    //     // breaking apart and adding all of the data to the packet
+    //     Parse32Bit(packet, mPressure);
+    //     Parse16Bit(packet, mTemperature); 
 
-        for (int16_t value : mAcceleration){
-            Parse16Bit(packet, value);
-        }
-        for (int16_t value : mMagneticFluxDensityTimes100){
-            Parse32Bit(packet, value);
-        }
+    //     for (int16_t value : mAcceleration){
+    //         Parse16Bit(packet, value);
+    //     }
+    //     for (int16_t value : mMagneticFluxDensityTimes100){
+    //         Parse32Bit(packet, value);
+    //     }
 
-        for (int16_t value : mRotation){
-            Parse16Bit(packet, value);
-        }
+    //     for (int16_t value : mRotation){
+    //         Parse16Bit(packet, value);
+    //     }
 
-        for (int16_t gpsCoordinate : mGpsCoordinates){
-            Parse16Bit(packet, gpsCoordinate);
-        }
+    //     for (int16_t gpsCoordinate : mGpsCoordinates){
+    //         Parse16Bit(packet, gpsCoordinate);
+    //     }
 
-        Parse16Bit(packet, mVelocityDividedBy100);
-        Parse16Bit(packet, mAltitude);
+    //     Parse16Bit(packet, mVelocityDividedBy100);
+    //     Parse16Bit(packet, mAltitude);
 
-        // calculating and adding the checksum to the packet
-        uint16_t checksum = CalculateChecksum(packet);
-        packet.push_back(checksum);
-        packet.push_back(0xBB);
+    //     // calculating and adding the checksum to the packet
+    //     uint16_t checksum = CalculateChecksum(packet);
+    //     packet.push_back(checksum);
+    //     packet.push_back(0xBB);
 
-        // for UI tests
-        //for (uint8_t value : packet){
-        //    Serial.println(value);
-        //}
+    //     // for UI tests
+    //     //for (uint8_t value : packet){
+    //     //    Serial.println(value);
+    //     //}
      
-        // write to LoRa
-        // Send packet
-        LoRa.beginPacket(); //Begin sending
-        // for (uint8_t value : packet){
-        // }
-        LoRa.write(packet.data(), packet.size());
-        LoRa.endPacket(); //End sending
+    //     // write to LoRa
+    //     // Send packet
+    //     LoRa.beginPacket(); //Begin sending
+    //     // for (uint8_t value : packet){
+    //     // }
+    //     LoRa.write(packet.data(), packet.size());
+    //     LoRa.endPacket(); //End sending
      
-        Serial.println("Sent Packet");
+    //     Serial.println("Sent Packet");
+
+    //     isSent = true;
+    //     delay(5000);
+    // }
+
+    if (!isSent) {
+        LoRa.beginPacket();
+        LoRa.write('Request!');
+        LoRa.endPacket();
+        isSent = true;
     }
-    else{
-        Serial.println("Recieving Mode");
-        int packetSize = LoRa.parsePacket();
-        if (packetSize)
+
+    // Serial.println("Recieving Mode");
+    int packetSize = LoRa.parsePacket();
+    if (packetSize)
+    {
+        while(LoRa.available())
         {
-            while(LoRa.available())
-            {
-                data[dataPos] = (char)LoRa.read();
-                Serial.write(data, packetSize);
-            }
-            delay(1000);
+            data[dataPos] = (char)LoRa.read();
+            Serial.write(data, packetSize);
         }
+        delay(2000);
+        
+        LoRa.beginPacket();
+        LoRa.write('Hey there!');
+        LoRa.endPacket();
     }
 }
 
