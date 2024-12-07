@@ -3,19 +3,19 @@
 class EKF
 {
 private:
-    uint64_t currentTime = 0;
-    uint64_t prevTime = 0;
-    float delT = 0.0f;
+    uint64_t mCurrentTime = 0;
+    uint64_t mPrevTime = 0;
+    float mDelT = 0.0f;
 
-    bool isFirstStep = true;
+    bool mIsFirstStep = true;
 
 public:
     EKF(){};
-    void initkalman();
-    void predict(float accel);
-    void updateBaro(float altitude);
+    void Initkalman();
+    void Predict(float accel);
+    void UpdateBaro(float altitude);
     //void updateGNSS();
-    float getKalmanPosition();
-    float getKalmanVelocity();
-    float getKalmanGain();
+    float GetKalmanPosition();
+    float GetKalmanVelocity();
+    float GetKalmanGain();
 };
