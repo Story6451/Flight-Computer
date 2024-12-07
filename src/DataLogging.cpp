@@ -1,3 +1,4 @@
+
 #include <DataLogging.h>
 #include <SD.h>
 
@@ -10,67 +11,67 @@ void DataLogging::Begin()
 {
   Serial.print("Initializing SD card...");
 
-  if (!SD.begin(chipSelect)) {
+  if (!SD.begin(mChipSelect)) {
     Serial.println("initialization failed. Things to check:");
     Serial.println("1. is a card inserted?");
     Serial.println("2. is your wiring correct?");
     Serial.println("3. did you change the chipSelect pin to match your shield or module?");
     Serial.println("Note: press reset button on the board and reopen this Serial Monitor after fixing your issue!");
   }
+
+  File dataFile = SD.open("datalog.csv", FILE_WRITE);
+  dataFile.println("State,pressure,altitude,temperature,altitudeOffset,MagnetometerXValue,MagnetometerYValue,MagnetometerZValue,AccelXValue,AccelYValue,AccelZValue,MagnetometerPitch,MagnetometerRoll,MagnetometerXCalculated,MagnetometerYCalculated,UncalibratedHeading");
+  dataFile.close();
 }
+void DataLogging::LogData(){ 
 
-void DataLogging::LogData()
-{
-    File dataFile = SD.open("datalog.txt", FILE_WRITE);
-    if (dataFile) {
+  File dataFile = SD.open("datalog.csv", FILE_WRITE);
 
-        Serial.println("STATE,TITLE1(UNIT1),TITLE2(UNIT2),TITLE3(UNIT3)");
+  if (dataFile) {
 
-        for(;;){
-            int State = 0;
-            float value1 = 1.0;
-            float value2 = 2.0;
-            float value3 = 3.0;
-            
-            String dataString = "";
+    Serial.println();
 
-            for(int analogPin = 0; analogPin < 3; analogPin++){
-                int sensor = analogRead(analogPin);
-                String dataString = "";
-    
-                if(analogPin == 1 ){
-                    if (sensor > value1){
-                        State = 1;
-                        dataString += String(State);
-                dataString += ",";
-                    }
-                    else if (sensor > value2){
-                        State = 2;
-                        dataString += String(State);
-                        dataString += ",";
-                    }
-                    else if (sensor > value3){
-                        State = 3;
-                        dataString += String(State);
-                        dataString += ",";
-                    }
-                    else{
-                        dataString += String(State);
-                        dataString += ",";
-                        continue;
-                    }
-                }
+    if((millis() - mLastTime) > mLogDelay) 
+    {
 
-                dataString += String(sensor);
+      dataFile.print(String(mState));
+      dataFile.print(",");
+      dataFile.print(String(mPressure));
+      dataFile.print(",");
+      dataFile.print(String(mAltitude));
+      dataFile.print(",");
+      dataFile.print(String(mTemperature));
+      dataFile.print(",");
+      dataFile.print(String(mAltitudeOffset));
+      dataFile.print(",");
+      dataFile.print(String(mMagnetometerXValue));
+      dataFile.print(",");
+      dataFile.print(String(mMagnetometerYValue));
+      dataFile.print(",");
+      dataFile.print(String(mMagnetometerZValue));
+      dataFile.print(",");
+      dataFile.print(String(mAccelXValue));
+      dataFile.print(",");
+      dataFile.print(String(mAccelYValue));
+      dataFile.print(",");
+      dataFile.print(String(mAccelZValue));
+      dataFile.print(",");
+      dataFile.print(String(mMagnetometerPitch));
+      dataFile.print(",");
+      dataFile.print(String(mMagnetometerRoll));
+      dataFile.print(",");
+      dataFile.print(String(mMagnetometerXCalculated));
+      dataFile.print(",");
+      dataFile.print(String(mMagnetometerYCalculated));
+      dataFile.print(",");
+      dataFile.println(String(mUncalibratedHeading));
 
-                if (analogPin < 2) {
-                    dataString += ",";
-                }
-            }
-            Serial.println(dataString);
-        }
-    }
-    else{
-        Serial.println("Error in opening file");
-    }
+      mLastTime = millis();      
+
+    }       
+  }
+  else{
+    Serial.println("Error in opening the file");
+  }
+  dataFile.close();
 }

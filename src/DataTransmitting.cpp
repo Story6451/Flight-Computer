@@ -6,6 +6,16 @@
 #include "LoRa-SOLDERED.h"
 
 
+void onReceive(int packetSize)
+{
+  if (packetSize)
+  {
+    while(LoRa.available()){
+      Serial.print((char)LoRa.read());
+    }
+    Serial.println(" ");
+  }
+}
 void DataTransmitting::Begin()
 {
     Serial.println("Initialising Lora");
@@ -14,56 +24,93 @@ void DataTransmitting::Begin()
 
 }
 
+void DataTransmitting::LogData(uint32_t pressure, uint16_t temperature, std::vector<int16_t> acceleration, std::vector<uint32_t> magneticFluxDensity, std::vector<int16_t> rotation, std::vector<int16_t> GpsCoordinates, int16_t velocity, uint16_t altitude){
+    mPressure = pressure;
+    mTemperature = temperature;
+    mAcceleration = acceleration;
+    for (int i=0; i<magneticFluxDensity.size(); i++){
+        mMagneticFluxDensityTimes100[i] = magneticFluxDensity[i]*100;
+    }
+    mRotation = rotation;
+    mGpsCoordinates = GpsCoordinates;
+    mVelocityDividedBy100 = velocity/100;
+    mAltitude = altitude;
+}
+
+bool isSent = false;
+
 void DataTransmitting::Transmit()
 {
+    if (millis() - lastTimeSent > 1000)
+    {
+        String message = "Sent Packet";   // Send a message
+        LoRa.beginPacket();
+        LoRa.print("HelloX2");
+        LoRa.endPacket();
+        Serial.println("Sending " + message);
+        lastTimeSent = millis();            // Timestamp the message
+    }
+
+  // Parse for a packet, and call onReceive with the result:
+  onReceive(LoRa.parsePacket());
 // (list of all data to recieve and in which format)
     //uint32_t pressure, uint16_t temperature, std::vector<int16_t> acceleration, 
     //std::vector<int16_t> magneticFluxDensity, std::vector<int16_t> rotation, std::vector<int16_t> gpsCoordinates,
     //int16_t velocity/100, uint16_t altitude 
      
     // creating the packet and the start byte
-    std::vector<uint8_t> packet = CreatePacket(0xAA);
+    // if ((millis() - lastTimeSent) > sendingInterval){
+    //     lastTimeSent = millis();
+    //     std::vector<uint8_t> packet = CreatePacket(0xAA);
 
-    // breaking apart and adding all of the data to the packet
-    Parse32Bit(packet, mPressure);
-    Parse16Bit(packet, mTemperature); 
+    //     // breaking apart and adding all of the data to the packet
+    //     Parse32Bit(packet, mPressure);
+    //     Parse16Bit(packet, mTemperature); 
+    //     // breaking apart and adding all of the data to the packet
+    //     Parse32Bit(packet, mPressure);
+    //     Parse16Bit(packet, mTemperature); 
 
-    for (int16_t value : mAcceleration){
-        Parse16Bit(packet, value);
-    }
-    for (int16_t value : mMagneticFluxDensityDividedBy100){
-        Parse32Bit(packet, value);
-    }
+    //     for (int16_t value : mAcceleration){
+    //         Parse16Bit(packet, value);
+    //     }
+    //     for (int16_t value : mMagneticFluxDensityTimes100){
+    //         Parse32Bit(packet, value);
+    //     }
+    //     for (int16_t value : mAcceleration){
+    //         Parse16Bit(packet, value);
+    //     }
+    //     for (int16_t value : mMagneticFluxDensityTimes100){
+    //         Parse32Bit(packet, value);
+    //     }
 
-    for (int16_t value : mRotation){
-        Parse16Bit(packet, value);
-    }
+    //     for (int16_t value : mRotation){
+    //         Parse16Bit(packet, value);
+    //     }
+    //     for (int16_t value : mRotation){
+    //         Parse16Bit(packet, value);
+    //     }
 
-    for (int16_t gpsCoordinate : mGpsCoordinates){
-        Parse16Bit(packet, gpsCoordinate);
-    }
+    //     for (int16_t gpsCoordinate : mGpsCoordinates){
+    //         Parse16Bit(packet, gpsCoordinate);
+    //     }
+    //     for (int16_t gpsCoordinate : mGpsCoordinates){
+    //         Parse16Bit(packet, gpsCoordinate);
+    //     }
 
-    Parse16Bit(packet, mVelocityDividedBy100);
-    Parse16Bit(packet, mAltitude);
+    //     Parse16Bit(packet, mVelocityDividedBy100);
+    //     Parse16Bit(packet, mAltitude);
+    //     Parse16Bit(packet, mVelocityDividedBy100);
+    //     Parse16Bit(packet, mAltitude);
 
-    // calculating and adding the checksum to the packet
-    uint16_t checksum = CalculateChecksum(packet);
-    packet.push_back(checksum);
+    //     // calculating and adding the checksum to the packet
+    //     uint16_t checksum = CalculateChecksum(packet);
+    //     packet.push_back(checksum);
+    //     packet.push_back(0xBB);
+    //     // calculating and adding the checksum to the packet
+    //     uint16_t checksum = CalculateChecksum(packet);
+    //     packet.push_back(checksum);
+    //     packet.push_back(0xBB);
 
-    // for UI tests
-    //for (uint8_t value : packet){
-    //    Serial.println(value);
-    //}
-    
-    // write to LoRa
-    // Send packet
-    LoRa.beginPacket(); //Begin sending
-    for (uint8_t value : packet){
-        LoRa.print(value);
-    }
-    LoRa.endPacket(); //End sending
-    
-    Serial.println("Sent Packet");
 }
 
 std::vector<uint8_t> DataTransmitting::CreatePacket(uint8_t start_byte){
@@ -72,19 +119,19 @@ std::vector<uint8_t> DataTransmitting::CreatePacket(uint8_t start_byte){
     return packet;
 }
 
-void DataTransmitting::Parse32Bit(std::vector<uint8_t> packet, uint32_t data){
+void DataTransmitting::Parse32Bit(std::vector<uint8_t>& packet, uint32_t data){
     packet.push_back((data >> 24) & 0xFF);
     packet.push_back((data >> 16) & 0xFF);
     packet.push_back((data >> 8) & 0xFF);
     packet.push_back(data & 0xFF);
 }
 
-void DataTransmitting::Parse16Bit(std::vector<uint8_t> packet, uint16_t data){
+void DataTransmitting::Parse16Bit(std::vector<uint8_t>& packet, uint16_t data){
     packet.push_back((data >> 8) & 0xFF);
     packet.push_back(data & 0xFF);
 }
 
-uint16_t DataTransmitting::CalculateChecksum(std::vector<uint8_t> packet){
+uint16_t DataTransmitting::CalculateChecksum(std::vector<uint8_t>& packet){
     uint16_t checksum = 0;
     for (size_t i=1; i<packet.size(); i++){
         checksum ^= packet[i];

@@ -14,16 +14,16 @@ EKF ekf;
 void setup() 
 {
   Serial.begin(9600);
-  Wire.begin();
-
+  //Wire.begin();
   //dataLogger.Begin();
-  dataReader.Begin();
+  //dataReader.Begin();
   dataTransmitter.Begin();
-  ekf.initkalman();
+  //ekf.initkalman();
 }
 
 void loop() 
 {
+  /*
   //Accelerometer
   dataReader.ReadAccelerometer();
   Serial.print("Accel X: ");
@@ -67,6 +67,20 @@ void loop()
   Serial.println(ekf.getKalmanPosition());
 
   Serial.println();
+  */
+  Serial.println("test");
   dataTransmitter.Transmit();
-  delay(100);
+  //delay(100);
+  /*
+  dataReader.ReadGPSStream();
+  dataReader.GPSStreamToData();
+
+  Serial.print("Latitude: "); Serial.print(dataReader.ReturnLatitude()); Serial.print(" ");
+  Serial.print("Longitude: "); Serial.print(dataReader.ReturnLongitude()); Serial.print(" ");
+  Serial.print("Altitude: "); Serial.print(dataReader.ReturnAltitude()); Serial.print(" ");
+  Serial.print("Velocity: "); Serial.print(dataReader.ReturnGPSVelocity()); Serial.print(" ");
+  Serial.print("Number of Satellites: "); Serial.print(dataReader.ReturnSatellitesConnected()); Serial.println(" ");
+
+  */
+  
 }

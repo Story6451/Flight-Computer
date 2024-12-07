@@ -6,7 +6,7 @@ private:
     const float ACCEL_SENSITIVITY = 0.061; // in mg/LSB, assuming ±2g full-scale range
     const uint32_t ITER_NO = 100;
 
-    const uint32_t GPS_BAUD = 4800;
+    const uint32_t GPS_BAUD = 9600;
 
     //uint32_t altIter;
     float mPressure = 0.0; 
