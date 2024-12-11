@@ -47,9 +47,7 @@ void DataTransmitting::Transmit()
     {
         String message = "Sent Packet";   // Send a message
         LoRa.beginPacket();
-        for (uint8_t value : packet){
-            LoRa.print(value);
-        }
+        LoRa.print("Spoon");
         LoRa.endPacket();
         Serial.println("Sending " + message);
         lastTimeSent = millis();            // Timestamp the message
