@@ -42,6 +42,8 @@ public:
 
     uint16_t CalculateChecksum(std::vector<uint8_t>& packet);
 
+    void SendPacket(uint8_t start_byte);
+
     void Transmit();
 
     DataTransmitting();

@@ -8,13 +8,13 @@
 
 void onReceive(int packetSize)
 {
-  if (packetSize)
-  {
-    while(LoRa.available()){
-      Serial.print((char)LoRa.read());
+    if (packetSize)
+    {
+        while(LoRa.available()){
+        Serial.print((char)LoRa.read());
+        }
+        Serial.println(" ");
     }
-    Serial.println(" ");
-  }
 }
 void DataTransmitting::Begin()
 {
@@ -37,81 +37,79 @@ void DataTransmitting::LogData(uint32_t pressure, uint16_t temperature, std::vec
     mAltitude = altitude;
 }
 
-bool isSent = false;
-
 void DataTransmitting::Transmit()
 {
-    if (millis() - lastTimeSent > 1000)
+    if (millis() - lastTimeSent > 100)
     {
-        String message = "Sent Packet";   // Send a message
-        LoRa.beginPacket();
-        LoRa.print("Spoon");
-        LoRa.endPacket();
-        Serial.println("Sending " + message);
-        lastTimeSent = millis();            // Timestamp the message
+        SendPacket(0xAA);
+        Serial.println("Sent Packet");
+        lastTimeSent = millis();
     }
 
-  // Parse for a packet, and call onReceive with the result:
-  onReceive(LoRa.parsePacket());
+    // Parse for a packet, and call onReceive with the result:
+    onReceive(LoRa.parsePacket());
+
+}
 // (list of all data to recieve and in which format)
     //uint32_t pressure, uint16_t temperature, std::vector<int16_t> acceleration, 
     //std::vector<int16_t> magneticFluxDensity, std::vector<int16_t> rotation, std::vector<int16_t> gpsCoordinates,
     //int16_t velocity/100, uint16_t altitude 
-     
-    // creating the packet and the start byte
-    // if ((millis() - lastTimeSent) > sendingInterval){
-    //     lastTimeSent = millis();
-    //     std::vector<uint8_t> packet = CreatePacket(0xAA);
 
-    //     // breaking apart and adding all of the data to the packet
-    //     Parse32Bit(packet, mPressure);
-    //     Parse16Bit(packet, mTemperature); 
-    //     // breaking apart and adding all of the data to the packet
-    //     Parse32Bit(packet, mPressure);
-    //     Parse16Bit(packet, mTemperature); 
+void DataTransmitting::SendPacket(uint8_t start_byte)
+{
+    std::vector<uint8_t> packet = CreatePacket(start_byte);
 
-    //     for (int16_t value : mAcceleration){
-    //         Parse16Bit(packet, value);
-    //     }
-    //     for (int16_t value : mMagneticFluxDensityTimes100){
-    //         Parse32Bit(packet, value);
-    //     }
-    //     for (int16_t value : mAcceleration){
-    //         Parse16Bit(packet, value);
-    //     }
-    //     for (int16_t value : mMagneticFluxDensityTimes100){
-    //         Parse32Bit(packet, value);
-    //     }
+    // breaking apart and adding all of the data to the packet
+    Parse32Bit(packet, mPressure);
+    Parse16Bit(packet, mTemperature); 
+    // breaking apart and adding all of the data to the packet
+    Parse32Bit(packet, mPressure);
+    Parse16Bit(packet, mTemperature); 
 
-    //     for (int16_t value : mRotation){
-    //         Parse16Bit(packet, value);
-    //     }
-    //     for (int16_t value : mRotation){
-    //         Parse16Bit(packet, value);
-    //     }
+    for (int16_t value : mAcceleration){
+        Parse16Bit(packet, value);
+    }
+    for (int16_t value : mMagneticFluxDensityTimes100){
+        Parse32Bit(packet, value);
+    }
+    for (int16_t value : mAcceleration){
+        Parse16Bit(packet, value);
+    }
+    for (int16_t value : mMagneticFluxDensityTimes100){
+        Parse32Bit(packet, value);
+    }
 
-    //     for (int16_t gpsCoordinate : mGpsCoordinates){
-    //         Parse16Bit(packet, gpsCoordinate);
-    //     }
-    //     for (int16_t gpsCoordinate : mGpsCoordinates){
-    //         Parse16Bit(packet, gpsCoordinate);
-    //     }
+    for (int16_t value : mRotation){
+        Parse16Bit(packet, value);
+    }
+    for (int16_t value : mRotation){
+        Parse16Bit(packet, value);
+    }
 
-    //     Parse16Bit(packet, mVelocityDividedBy100);
-    //     Parse16Bit(packet, mAltitude);
-    //     Parse16Bit(packet, mVelocityDividedBy100);
-    //     Parse16Bit(packet, mAltitude);
+    for (int16_t gpsCoordinate : mGpsCoordinates){
+        Parse16Bit(packet, gpsCoordinate);
+    }
+    for (int16_t gpsCoordinate : mGpsCoordinates){
+        Parse16Bit(packet, gpsCoordinate);
+    }
 
-    //     // calculating and adding the checksum to the packet
-    //     uint16_t checksum = CalculateChecksum(packet);
-    //     packet.push_back(checksum);
-    //     packet.push_back(0xBB);
-    //     // calculating and adding the checksum to the packet
-    //     uint16_t checksum = CalculateChecksum(packet);
-    //     packet.push_back(checksum);
-    //     packet.push_back(0xBB);
+    Parse16Bit(packet, mVelocityDividedBy100);
+    Parse16Bit(packet, mAltitude);
+    Parse16Bit(packet, mVelocityDividedBy100);
+    Parse16Bit(packet, mAltitude);
 
+    // calculating and adding the checksum to the packet
+    uint16_t checksum = CalculateChecksum(packet);
+    packet.push_back(checksum);
+    packet.push_back(0xBB);
+    LoRa.beginPacket();
+    for (uint8_t value : packet)
+    {
+     LoRa.print(value);
+    }
+    LoRa.endPacket();
 }
+   
 
 std::vector<uint8_t> DataTransmitting::CreatePacket(uint8_t start_byte){
     const uint8_t START_BYTE = start_byte;
