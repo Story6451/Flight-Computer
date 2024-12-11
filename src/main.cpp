@@ -68,7 +68,7 @@ void loop()
 
   Serial.println();
   */
-  Serial.println("test");
+  //Serial.println("test");
   dataTransmitter.Transmit();
   //delay(100);
   /*
