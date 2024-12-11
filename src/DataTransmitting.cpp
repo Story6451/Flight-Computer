@@ -41,11 +41,15 @@ bool isSent = false;
 
 void DataTransmitting::Transmit()
 {
-    if (millis() - lastTimeSent > 1000)
+    std::vector<uint8_t> packet = CreatePacket(0xAA);
+
+    if (millis() - lastTimeSent > sendingInterval)
     {
         String message = "Sent Packet";   // Send a message
         LoRa.beginPacket();
-        LoRa.print("HelloX2");
+        for (uint8_t value : packet){
+            LoRa.print(value);
+        }
         LoRa.endPacket();
         Serial.println("Sending " + message);
         lastTimeSent = millis();            // Timestamp the message
@@ -61,8 +65,7 @@ void DataTransmitting::Transmit()
     // creating the packet and the start byte
     // if ((millis() - lastTimeSent) > sendingInterval){
     //     lastTimeSent = millis();
-    //     std::vector<uint8_t> packet = CreatePacket(0xAA);
-
+    
     //     // breaking apart and adding all of the data to the packet
     //     Parse32Bit(packet, mPressure);
     //     Parse16Bit(packet, mTemperature); 
