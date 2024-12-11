@@ -47,7 +47,7 @@ BLA::Matrix<2, 1> G;
 // Input Variable
 BLA::Matrix<1, 1> U;
 
-void EKF::initkalman()
+void EKF::Initkalman()
 {
     X = {0,
          0};
@@ -55,22 +55,22 @@ void EKF::initkalman()
     P = {0, 0,
          0, 0};
 }
-void EKF::predict(float accel)
+void EKF::Predict(float accel)
 {
-    currentTime = micros();
-    delT = (currentTime - prevTime) / 1000000.0f;
-    prevTime = currentTime;
+    mCurrentTime = micros();
+    mDelT = (mCurrentTime - mPrevTime) / 1000000.0f;
+    mPrevTime = mCurrentTime;
 
-    if (!isFirstStep)
+    if (!mIsFirstStep)
     {
         // Dynamic model of the system pos = pos_0 + v_0 * delT + (accel*delT^2)/2
         //                             vel = v_0 + accel*delT
         F = {
-            1, delT,
+            1, mDelT,
             0, 1};
 
-        G = {0.5 * pow(delT,2),
-             delT};
+        G = {0.5 * pow(mDelT,2),
+             mDelT};
 
         U = {accel};
 
@@ -79,10 +79,10 @@ void EKF::predict(float accel)
         X = F * X + G * U;
         P = F * P * ~F + Q;
     }
-    isFirstStep = false;
+    mIsFirstStep = false;
 }
 
-void EKF::updateBaro(float altitude)
+void EKF::UpdateBaro(float altitude)
 {
     M_Baro = {altitude};
     //L = H_Baro * P * ~H_Baro + R_Baro;
@@ -98,17 +98,17 @@ void EKF::updateBaro(float altitude)
 
 // void EKF::updateGNSS(){}
 
-float EKF::getKalmanPosition()
+float EKF::GetKalmanPosition()
 {
     return X(0, 0);
 }
 
-float EKF::getKalmanVelocity()
+float EKF::GetKalmanVelocity()
 {
     return X(1, 0);
 }
 
-float EKF::getKalmanGain()
+float EKF::GetKalmanGain()
 {
     return K_Baro(1, 0);
 }
