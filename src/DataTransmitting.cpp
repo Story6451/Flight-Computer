@@ -39,7 +39,7 @@ void DataTransmitting::LogData(uint32_t pressure, uint16_t temperature, std::vec
 
 void DataTransmitting::Transmit()
 {
-    if (millis() - lastTimeSent > 100)
+    if ((millis() - lastTimeSent) > 100)
     {
         SendPacket(0xAA);
         Serial.println("Sent Packet");
