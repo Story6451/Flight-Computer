@@ -93,18 +93,11 @@ void DataTransmitting::SendPacket(uint8_t start_byte)
 
     // calculating and adding the checksum to the packet
     uint16_t checksum = CalculateChecksum(packet);
-    packet.push_back(checksum);
+    Parse16Bit(packet, checksum);
+    //packet.push_back(checksum);
     packet.push_back(0xBB);
     LoRa.beginPacket();
     
-    //delay(1000);
-    /*
-    for (int16_t i = 0; i < packet.size(); i++)
-    {
-        Serial.print((String)packet[i] + "-");
-    }
-    Serial.println();
-    */
     Serial.print("Sending Packet: ");
     for (uint8_t value : packet)
     {
