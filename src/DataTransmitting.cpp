@@ -43,7 +43,7 @@ void DataTransmitting::Transmit()
     if ((millis() - lastTimeSent) > sendingInterval)
     {
         SendPacket(0xAA);
-        Serial.println("Sent Packet");
+        
         lastTimeSent = millis();
     }
 
@@ -105,12 +105,14 @@ void DataTransmitting::SendPacket(uint8_t start_byte)
     }
     Serial.println();
     */
-   Serial.println(checksum);
+    Serial.print("Sending Packet: ");
     for (uint8_t value : packet)
     {
+        Serial.print(value);
         LoRa.print(value);
         LoRa.print("-");
     }
+    Serial.print(" Checksum: "); Serial.println(checksum);
     LoRa.endPacket();
 }
    
