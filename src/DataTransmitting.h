@@ -10,8 +10,8 @@ private:
     const uint8_t IRQ_PIN = 2;         // Change for your board; must be a hardware interrupt pin
     /* data */
     // dummy data for testing the rest of the code
-    uint32_t mPressure = 10000;
-    uint16_t mTemperature = 100;
+    uint32_t mPressure = 100000;
+    uint16_t mTemperature = 20;
     std::vector<int16_t> mAcceleration = { 2, -1, 4 };
     std::vector<uint32_t> mMagneticFluxDensityTimes100 = { 10, 50, 20 }; // Magnetometer value * 100
     std::vector<int16_t> mRotation = { 0, 1, -4 };
