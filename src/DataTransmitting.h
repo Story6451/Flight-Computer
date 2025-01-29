@@ -19,7 +19,7 @@ private:
     int16_t mVelocityDividedBy100 = -2; // Velocity value * 100
     uint16_t mAltitude = 2000;
 
-    uint16_t sendingInterval = 250;
+    uint16_t sendingInterval = 500;
     uint32_t lastTimeSent = 0;
     int mExpectedDataSize = 34;
     char data[34] = {};

@@ -10,6 +10,7 @@ void onReceive(int packetSize)
 {
     if (packetSize)
     {
+        Serial.println(" ");
         while(LoRa.available()){
         Serial.print((char)LoRa.read());
         }
@@ -39,7 +40,7 @@ void DataTransmitting::LogData(uint32_t pressure, uint16_t temperature, std::vec
 
 void DataTransmitting::Transmit()
 {
-    if ((millis() - lastTimeSent) > 100)
+    if ((millis() - lastTimeSent) > sendingInterval)
     {
         SendPacket(0xAA);
         Serial.println("Sent Packet");
@@ -103,9 +104,19 @@ void DataTransmitting::SendPacket(uint8_t start_byte)
     packet.push_back(checksum);
     packet.push_back(0xBB);
     LoRa.beginPacket();
+    
+    //delay(1000);
+    /*
+    for (int16_t i = 0; i < packet.size(); i++)
+    {
+        Serial.print((String)packet[i] + "-");
+    }
+    Serial.println();
+    */
     for (uint8_t value : packet)
     {
-     LoRa.print(value);
+        LoRa.print(value);
+        LoRa.print("-");
     }
     LoRa.endPacket();
 }
