@@ -64,15 +64,11 @@ void DataTransmitting::SendPacket(uint8_t start_byte)
     Parse32Bit(packet, mPressure);
     Parse16Bit(packet, mTemperature); 
     // breaking apart and adding all of the data to the packet
+    /*
     Parse32Bit(packet, mPressure);
     Parse16Bit(packet, mTemperature); 
+    */
 
-    for (int16_t value : mAcceleration){
-        Parse16Bit(packet, value);
-    }
-    for (int16_t value : mMagneticFluxDensityTimes100){
-        Parse32Bit(packet, value);
-    }
     for (int16_t value : mAcceleration){
         Parse16Bit(packet, value);
     }
@@ -83,21 +79,17 @@ void DataTransmitting::SendPacket(uint8_t start_byte)
     for (int16_t value : mRotation){
         Parse16Bit(packet, value);
     }
-    for (int16_t value : mRotation){
-        Parse16Bit(packet, value);
-    }
 
-    for (int16_t gpsCoordinate : mGpsCoordinates){
-        Parse16Bit(packet, gpsCoordinate);
-    }
     for (int16_t gpsCoordinate : mGpsCoordinates){
         Parse16Bit(packet, gpsCoordinate);
     }
 
     Parse16Bit(packet, mVelocityDividedBy100);
     Parse16Bit(packet, mAltitude);
+    /*
     Parse16Bit(packet, mVelocityDividedBy100);
     Parse16Bit(packet, mAltitude);
+    */
 
     // calculating and adding the checksum to the packet
     uint16_t checksum = CalculateChecksum(packet);
