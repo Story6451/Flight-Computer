@@ -105,6 +105,7 @@ void DataTransmitting::SendPacket(uint8_t start_byte)
     }
     Serial.println();
     */
+   Serial.println(checksum);
     for (uint8_t value : packet)
     {
         LoRa.print(value);
@@ -134,8 +135,8 @@ void DataTransmitting::Parse16Bit(std::vector<uint8_t>& packet, uint16_t data){
 
 uint16_t DataTransmitting::CalculateChecksum(std::vector<uint8_t>& packet){
     uint16_t checksum = 0;
-    for (size_t i=1; i<packet.size(); i++){
-        checksum ^= packet[i];
+    for (uint8_t i=0; i<packet.size(); i++){
+        checksum += packet[i];
     }
     return checksum;
 }
