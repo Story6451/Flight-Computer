@@ -4,6 +4,8 @@
 #include <DataReading.h>
 #include <DataTransmitting.h>
 #include <kalman.h>
+#include <vector>
+#include <cstdint>
 
 DataLogging dataLogger;
 DataReading dataReader;
@@ -23,54 +25,67 @@ void setup()
 
 void loop() 
 {
+  std::vector<String> dataNameToSend;
+  std::vector<uint32_t> dataToSend;
   
-  /*
   //Accelerometer
   dataReader.ReadAccelerometer();
-  Serial.print("Accel X: ");
-  Serial.println(dataReader.ReturnAccelerometerX());
+  float aX = dataReader.ReturnAccelerometerX();
+  float aY = dataReader.ReturnAccelerometerY();
+  float aZ = dataReader.ReturnAccelerometerZ();
+  
+  dataNameToSend = {"accelXValue", "accelYValue", "accelZValue"};
+  dataToSend = {(uint32_t)aX, (uint32_t)aY, (uint32_t)aZ};
+  dataTransmitter.Transmit(dataNameToSend, dataToSend, 0);
+  // Serial.print("Accel X: ");
+  // Serial.println(dataReader.ReturnAccelerometerX());
 
-  Serial.print("Accel Y: ");
-  Serial.println(dataReader.ReturnAccelerometerY());
+  // Serial.print("Accel Y: ");
+  // Serial.println(dataReader.ReturnAccelerometerY());
 
-  Serial.print("Accel Z: ");
-  Serial.println(dataReader.ReturnAccelerometerZ());
+  // Serial.print("Accel Z: ");
+  // Serial.println(dataReader.ReturnAccelerometerZ());
 
   //Magnetometer
   dataReader.ReadMagnetometer();
-  Serial.print("Magnetic Field Strength X: ");
-  Serial.println(dataReader.ReturnMagnetometerX());
+  float mX = dataReader.ReturnMagnetometerX();
+  float mY = dataReader.ReturnMagnetometerY();
+  float mZ = dataReader.ReturnMagnetometerZ();
+  dataNameToSend = {"magnetometerXValue", "magnetometerYValue", "magnetometerZValue"};
+  dataToSend = {(uint32_t)mX, (uint32_t)mY, (uint32_t)mZ};
+  dataTransmitter.Transmit(dataNameToSend, dataToSend, 1);
+  // Serial.print("Magnetic Field Strength X: ");
+  // Serial.println(dataReader.ReturnMagnetometerX());
 
-  Serial.print("Magnetic Field Strength Y: ");
-  Serial.println(dataReader.ReturnMagnetometerY());
+  // Serial.print("Magnetic Field Strength Y: ");
+  // Serial.println(dataReader.ReturnMagnetometerY());
 
-  Serial.print("Magnetic Field Strength Z: ");
-  Serial.println(dataReader.ReturnMagnetometerZ());
+  // Serial.print("Magnetic Field Strength Z: ");
+  // Serial.println(dataReader.ReturnMagnetometerZ());
 
-  //Baro
-  dataReader.ReadBarometer();
+  // //Baro
+  // dataReader.ReadBarometer();
 
-  Serial.print("Baro Altitude: ");
-  Serial.println(dataReader.ReturnAltitude());
+  // Serial.print("Baro Altitude: ");
+  // Serial.println(dataReader.ReturnAltitude());
 
-  Serial.print("Pressure: ");
-  Serial.println(dataReader.ReturnPressure());
+  // Serial.print("Pressure: ");
+  // Serial.println(dataReader.ReturnPressure());
 
-  Serial.print("Temperature: ");
-  Serial.println(dataReader.ReturnTemperature());
+  // Serial.print("Temperature: ");
+  // Serial.println(dataReader.ReturnTemperature());
 
-  float accel = -dataReader.ReturnAccelerometerX();
-  ekf.predict(accel);
+  // float accel = -dataReader.ReturnAccelerometerX();
+  // ekf.predict(accel);
 
-  ekf.updateBaro(dataReader.ReturnAltitude());
+  // ekf.updateBaro(dataReader.ReturnAltitude());
 
-  Serial.print("Kalman Position: ");
-  Serial.println(ekf.getKalmanPosition());
+  // Serial.print("Kalman Position: ");
+  // Serial.println(ekf.getKalmanPosition());
 
-  Serial.println();
-  */
+  // Serial.println();
+  
   //Serial.println("test");
-  dataTransmitter.Transmit(/*Enter test data here*/);
   //delay(100);
   /*
   dataReader.ReadGPSStream();

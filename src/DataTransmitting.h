@@ -42,10 +42,10 @@ public:
 
     uint16_t CalculateChecksum(std::vector<uint8_t>& packet);
 
-    void SendSmallPacket(uint8_t start_byte, std::vector<String>& dataNames, std::vector<uint16_t>& data);   //sends the packet that contains data of 2 bytes
-    void SendLargePacket(uint8_t start_byte, std::vector<String>& dataNames, std::vector<uint32_t>& data);   //sends the packet that contains data of 4 bytes
+    void SendSmallPacket(uint8_t start_byte, std::vector<String>& dataName, std::vector<uint16_t>& data);   //sends the packet that contains data of 2 bytes
+    void SendLargePacket(uint8_t start_byte, std::vector<String>& dataName, std::vector<uint32_t>& data);   //sends the packet that contains data of 4 bytes
 
-    void Transmit(std::vector<String>& dataName, std::vector<uint32_t>& , bool size);
+    void Transmit(std::vector<String>& dataName, std::vector<uint32_t>& , bool type);
     
 
     DataTransmitting();
