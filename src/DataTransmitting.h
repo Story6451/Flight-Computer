@@ -42,9 +42,11 @@ public:
 
     uint16_t CalculateChecksum(std::vector<uint8_t>& packet);
 
-    void SendPacket(uint8_t start_byte);
+    void SendSmallPacket(uint8_t start_byte, std::vector<String>& dataNames, std::vector<uint16_t>& data);   //sends the packet that contains data of 2 bytes
+    void SendLargePacket(uint8_t start_byte, std::vector<String>& dataNames, std::vector<uint32_t>& data);   //sends the packet that contains data of 4 bytes
 
-    void Transmit();
+    void Transmit(std::vector<String>& dataName, std::vector<uint32_t>& , bool size);
+    
 
     DataTransmitting();
         //uint32_t pressure, uint16_t temperature, std::vector<int16_t> acceleration, std::vector<int16_t> magneticFluxDensityDividedBy100, std::vector<int16_t> rotation, std::vector<int16_t> gpsCoordinates, int16_t velocityDividedBy100, uint16_t altitude);

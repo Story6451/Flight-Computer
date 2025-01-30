@@ -23,6 +23,7 @@ void setup()
 
 void loop() 
 {
+  
   /*
   //Accelerometer
   dataReader.ReadAccelerometer();
@@ -69,7 +70,7 @@ void loop()
   Serial.println();
   */
   //Serial.println("test");
-  dataTransmitter.Transmit();
+  dataTransmitter.Transmit(/*Enter test data here*/);
   //delay(100);
   /*
   dataReader.ReadGPSStream();

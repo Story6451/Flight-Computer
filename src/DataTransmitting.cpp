@@ -38,60 +38,76 @@ void DataTransmitting::LogData(uint32_t pressure, uint16_t temperature, std::vec
     mAltitude = altitude;
 }
 
-void DataTransmitting::Transmit()
+void DataTransmitting::Transmit(std::vector<String>& dataName, std::vector<uint32_t>& data, bool size)
 {
+
     if ((millis() - lastTimeSent) > sendingInterval)
     {
-        SendPacket(0xAA);
+        if (size == 0)
+        {
+            std::vector<uint16_t> temp;
+            for (uint8_t i = 0; i < data.size(); i++)
+            {
+                temp.push_back((uint16_t)data[i]);
+            }
+            
+            SendSmallPacket(0xAA, dataName, temp);
+        }
+        else
+        {
+            //send large packet
+        }
         
         lastTimeSent = millis();
     }
 
     // Parse for a packet, and call onReceive with the result:
     onReceive(LoRa.parsePacket());
-
 }
 // (list of all data to recieve and in which format)
     //uint32_t pressure, uint16_t temperature, std::vector<int16_t> acceleration, 
     //std::vector<int16_t> magneticFluxDensity, std::vector<int16_t> rotation, std::vector<int16_t> gpsCoordinates,
     //int16_t velocity/100, uint16_t altitude 
 
-void DataTransmitting::SendPacket(uint8_t start_byte)
+void DataTransmitting::SendSmallPacket(uint8_t start_byte, std::vector<String>& dataName, std::vector<uint16_t>& data)
 {
     std::vector<uint8_t> packet = CreatePacket(start_byte);
 
-    // breaking apart and adding all of the data to the packet
-    Parse32Bit(packet, mPressure);
-    Parse16Bit(packet, mTemperature); 
-    // breaking apart and adding all of the data to the packet
-    /*
-    Parse32Bit(packet, mPressure);
-    Parse16Bit(packet, mTemperature); 
-    */
+    
 
-    for (int16_t value : mAcceleration){
-        Parse16Bit(packet, value);
-    }
-    for (int16_t value : mMagneticFluxDensityTimes100){
-        Parse32Bit(packet, value);
-    }
+    // // breaking apart and adding all of the data to the packet
+    // Parse32Bit(packet, mPressure);
+    // Parse16Bit(packet, mTemperature); 
+    // // breaking apart and adding all of the data to the packet
+    // /*
+    // Parse32Bit(packet, mPressure);
+    // Parse16Bit(packet, mTemperature); 
+    // */
 
-    for (int16_t value : mRotation){
-        Parse16Bit(packet, value);
-    }
+    // for (int16_t value : mAcceleration){
+    //     Parse16Bit(packet, value);
+    // }
+    // for (int16_t value : mMagneticFluxDensityTimes100){
+    //     Parse32Bit(packet, value);
+    // }
 
-    for (int16_t gpsCoordinate : mGpsCoordinates){
-        Parse16Bit(packet, gpsCoordinate);
-    }
+    // for (int16_t value : mRotation){
+    //     Parse16Bit(packet, value);
+    // }
 
-    Parse16Bit(packet, mVelocityDividedBy100);
-    Parse16Bit(packet, mAltitude);
-    /*
-    Parse16Bit(packet, mVelocityDividedBy100);
-    Parse16Bit(packet, mAltitude);
-    */
+    // for (int16_t gpsCoordinate : mGpsCoordinates){
+    //     Parse16Bit(packet, gpsCoordinate);
+    // }
 
-    // calculating and adding the checksum to the packet
+    // Parse16Bit(packet, mVelocityDividedBy100);
+    // Parse16Bit(packet, mAltitude);
+    // /*
+    // Parse16Bit(packet, mVelocityDividedBy100);
+    // Parse16Bit(packet, mAltitude);
+    // */
+
+    // // calculating and adding the checksum to the packet
+    
     uint16_t checksum = CalculateChecksum(packet);
     Parse16Bit(packet, checksum);
     //packet.push_back(checksum);
