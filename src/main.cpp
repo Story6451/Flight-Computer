@@ -98,5 +98,5 @@ void loop()
   Serial.print("Number of Satellites: "); Serial.print(dataReader.ReturnSatellitesConnected()); Serial.println(" ");
 
   */
-  
+  Serial.println(dataTransmitter.ReadLoRa());
 }
