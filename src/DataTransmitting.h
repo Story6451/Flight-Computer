@@ -40,15 +40,18 @@ public:
     // breaks apart any 16bit data into 8bit chunks and adds it to the packet
     void Parse16Bit(std::vector<uint8_t>& packet, uint16_t data);
 
-    uint16_t CalculateChecksum(std::vector<uint8_t>& packet);
+    uint16_t CalculateChecksum(std::vector<double>& data);
 
-    void SendSmallPacket(uint8_t start_byte, std::vector<String>& dataName, std::vector<uint16_t>& data);   //sends the packet that contains data of 2 bytes
-    void SendLargePacket(uint8_t start_byte, std::vector<String>& dataName, std::vector<uint32_t>& data);   //sends the packet that contains data of 4 bytes
-
-    void Transmit(std::vector<String>& dataName, std::vector<uint32_t>& , bool type);
+    void SendPacket(uint8_t start_byte, std::vector<String>& dataName, std::vector<double>& data);
+    void Transmit(std::vector<String>& dataName, std::vector<double>& data);
     
 
     DataTransmitting();
+    ///NOT IN USE
+    void SendSmallPacket(uint8_t start_byte, std::vector<String>& dataName, std::vector<uint16_t>& data);   //sends the packet that contains data of 2 bytes
+    void SendLargePacket(uint8_t start_byte, std::vector<String>& dataName, std::vector<uint32_t>& data);   //sends the packet that contains data of 4 bytes
+
+
         //uint32_t pressure, uint16_t temperature, std::vector<int16_t> acceleration, std::vector<int16_t> magneticFluxDensityDividedBy100, std::vector<int16_t> rotation, std::vector<int16_t> gpsCoordinates, int16_t velocityDividedBy100, uint16_t altitude);
     //uint32_t pressure, uint16_t temperature, std::vector<int16_t> acceleration, std::vector<int16_t> magneticFluxDensity, std::vector<int16_t> rotation, std::vector<int16_t> gpsCoordinates, int16_t velocity/100, uint16_t altitude 
 };

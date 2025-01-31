@@ -26,7 +26,7 @@ void setup()
 void loop() 
 {
   std::vector<String> dataNameToSend;
-  std::vector<uint32_t> dataToSend;
+  std::vector<double> dataToSend;
   
   //Accelerometer
   dataReader.ReadAccelerometer();
@@ -35,8 +35,8 @@ void loop()
   float aZ = dataReader.ReturnAccelerometerZ();
   
   dataNameToSend = {"accelXValue", "accelYValue", "accelZValue"};
-  dataToSend = {(uint32_t)aX, (uint32_t)aY, (uint32_t)aZ};
-  dataTransmitter.Transmit(dataNameToSend, dataToSend, 0);
+  dataToSend = {(double)aX, (double)aY, (double)aZ};
+  dataTransmitter.Transmit(dataNameToSend, dataToSend);
   // Serial.print("Accel X: ");
   // Serial.println(dataReader.ReturnAccelerometerX());
 
@@ -52,8 +52,8 @@ void loop()
   float mY = dataReader.ReturnMagnetometerY();
   float mZ = dataReader.ReturnMagnetometerZ();
   dataNameToSend = {"magnetometerXValue", "magnetometerYValue", "magnetometerZValue"};
-  dataToSend = {(uint32_t)mX, (uint32_t)mY, (uint32_t)mZ};
-  dataTransmitter.Transmit(dataNameToSend, dataToSend, 1);
+  dataToSend = {(double)mX, (double)mY, (double)mZ};
+  dataTransmitter.Transmit(dataNameToSend, dataToSend);
   // Serial.print("Magnetic Field Strength X: ");
   // Serial.println(dataReader.ReturnMagnetometerX());
 
