@@ -96,6 +96,7 @@ void DataTransmitting::SendPacket(uint8_t start_byte, std::vector<String>& dataN
         LoRa.print(data[i]);
         LoRa.print("-");
     }
+    LoRa.print("CKS-");
     LoRa.print(checksum);
     LoRa.print("-");
     LoRa.endPacket();
