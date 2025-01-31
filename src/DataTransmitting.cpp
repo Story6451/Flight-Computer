@@ -41,7 +41,7 @@ void DataTransmitting::Begin()
 //     mAltitude = altitude;
 // }
 
-void DataTransmitting::Transmit(std::vector<String>& dataName, std::vector<double>& data)
+void DataTransmitting::Transmit(std::vector<String> dataName, std::vector<double> data)
 {
     
     if ((millis() - lastTimeSent) > sendingInterval)
@@ -58,7 +58,7 @@ String DataTransmitting::ReadLoRa()
     return onReceive(LoRa.parsePacket());
 }
 
-void DataTransmitting::SendPacket(uint8_t start_byte, std::vector<String>& dataName, std::vector<double>& data)
+void DataTransmitting::SendPacket(uint8_t start_byte, std::vector<String> dataName, std::vector<double> data)
 {
     if (dataName.size() < data.size())
     {
@@ -78,35 +78,35 @@ void DataTransmitting::SendPacket(uint8_t start_byte, std::vector<String>& dataN
         
     }
 
-    uint16_t checksum = CalculateChecksum(data);
+    uint32_t checksum = CalculateChecksum(data);
     Serial.print(start_byte);
-    Serial.print("-");
+    Serial.print(",");
     Serial.print(data.size());
-    Serial.print("-");
+    Serial.print(",");
 
     LoRa.beginPacket();
     LoRa.print(start_byte);
-    LoRa.print("-");
+    LoRa.print(",");
     LoRa.print(data.size());
-    LoRa.print("-");
+    LoRa.print(",");
     for (uint8_t i = 0; i < data.size(); i++)
     {
         Serial.print(dataName[i]);
-        //Serial.print("-");
+        Serial.print(",");
         Serial.print(data[i]);
-        Serial.print("-");
+        Serial.print(",");
         LoRa.print(dataName[i]);
-        //LoRa.print("-");
+        LoRa.print(",");
         LoRa.print(data[i]);
-        LoRa.print("-");
+        LoRa.print(",");
     }
-    LoRa.print("CKS-");
+    LoRa.print("CKS,");
     LoRa.print(checksum);
-    LoRa.print("-");
+    LoRa.print(",");
     LoRa.endPacket();
 
-    Serial.print("CKS-");
-    Serial.print(checksum); Serial.println("-");
+    Serial.print("CKS,");
+    Serial.print(checksum); Serial.println(",");
 }
 
 // std::vector<uint8_t> DataTransmitting::CreatePacket(uint8_t start_byte){
@@ -127,10 +127,11 @@ void DataTransmitting::SendPacket(uint8_t start_byte, std::vector<String>& dataN
 //     packet.push_back(data & 0xFF);
 // }
 
-uint16_t DataTransmitting::CalculateChecksum(std::vector<double>& data){
-    uint16_t checksum = 0;
+uint32_t DataTransmitting::CalculateChecksum(std::vector<double> data){
+    uint32_t checksum = 0;
     for (uint8_t i=0; i<data.size(); i++){
-        checksum += data[i];
+        checksum += (uint32_t)(abs(data[i]*100));
+        // Serial.println(data[i]);
     }
     return checksum;
 }

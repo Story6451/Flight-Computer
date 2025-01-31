@@ -42,13 +42,13 @@ public:
     //void Parse16Bit(std::vector<uint8_t>& packet, uint16_t data);
 
     //calculates the checksum using the values of the data sent
-    uint16_t CalculateChecksum(std::vector<double>& data);
+    uint32_t CalculateChecksum(std::vector<double> data);
 
     //sends the packet
-    void SendPacket(uint8_t start_byte, std::vector<String>& dataName, std::vector<double>& data);
+    void SendPacket(uint8_t start_byte, std::vector<String> dataName, std::vector<double> data);
 
     //runs through a tranmission loop
-    void Transmit(std::vector<String>& dataName, std::vector<double>& data);
+    void Transmit(std::vector<String> dataName, std::vector<double> data);
 
     //reads and returns data from the LoRa
     String ReadLoRa();

@@ -30,12 +30,26 @@ void loop()
   
   //Accelerometer
   dataReader.ReadAccelerometer();
+  dataReader.ReadMagnetometer();
   float aX = dataReader.ReturnAccelerometerX();
   float aY = dataReader.ReturnAccelerometerY();
   float aZ = dataReader.ReturnAccelerometerZ();
-  
-  dataNameToSend = {"accelXValue", "accelYValue", "accelZValue"};
-  dataToSend = {(double)aX, (double)aY, (double)aZ};
+  float mX = dataReader.ReturnMagnetometerX();
+  float mY = dataReader.ReturnMagnetometerY();
+  float mZ = dataReader.ReturnMagnetometerZ();
+  dataToSend.push_back(aX);
+  dataToSend.push_back(aY);
+  dataToSend.push_back(aZ);
+  dataToSend.push_back(mX);
+  dataToSend.push_back(mY);
+  dataToSend.push_back(mZ);
+  dataNameToSend.push_back("accelXValue");// = {"accelXValue", "accelYValue", "accelZValue"};
+  dataNameToSend.push_back("accelYValue");
+  dataNameToSend.push_back("accelZValue");
+  dataNameToSend.push_back("magnetometerXValue");
+  dataNameToSend.push_back("magnetometerYValue");
+  dataNameToSend.push_back("magnetometerZValue");
+  //Serial.println(aX);
   dataTransmitter.Transmit(dataNameToSend, dataToSend);
   // Serial.print("Accel X: ");
   // Serial.println(dataReader.ReturnAccelerometerX());
@@ -45,15 +59,7 @@ void loop()
 
   // Serial.print("Accel Z: ");
   // Serial.println(dataReader.ReturnAccelerometerZ());
-
-  //Magnetometer
-  dataReader.ReadMagnetometer();
-  float mX = dataReader.ReturnMagnetometerX();
-  float mY = dataReader.ReturnMagnetometerY();
-  float mZ = dataReader.ReturnMagnetometerZ();
-  dataNameToSend = {"magnetometerXValue", "magnetometerYValue", "magnetometerZValue"};
-  dataToSend = {(double)mX, (double)mY, (double)mZ};
-  dataTransmitter.Transmit(dataNameToSend, dataToSend);
+  //dataTransmitter.Transmit(dataNameToSend, dataToSend);
   // Serial.print("Magnetic Field Strength X: ");
   // Serial.println(dataReader.ReturnMagnetometerX());
 
