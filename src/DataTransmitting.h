@@ -22,9 +22,9 @@ private:
 
     uint16_t sendingInterval = 500;
     uint32_t lastTimeSent = 0;
-    int mExpectedDataSize = 34;
+    //int mExpectedDataSize = 34;
     //char data[34] = {};
-    uint8_t dataPos = 0;
+    //uint8_t dataPos = 0;
 public:
     // Initialising the LoRa
     void Begin();
