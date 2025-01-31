@@ -21,7 +21,7 @@ private:
     // uint16_t mAltitude = 2000;
 
     uint16_t sendingInterval = 500;
-    uint32_t lastTimeSent = 0;
+    uint64_t lastTimeSent = 0;
     //int mExpectedDataSize = 34;
     //char data[34] = {};
     //uint8_t dataPos = 0;
@@ -41,11 +41,19 @@ public:
     // breaks apart any 16bit data into 8bit chunks and adds it to the packet
     //void Parse16Bit(std::vector<uint8_t>& packet, uint16_t data);
 
+    //calculates the checksum using the values of the data sent
     uint16_t CalculateChecksum(std::vector<double>& data);
 
+    //sends the packet
     void SendPacket(uint8_t start_byte, std::vector<String>& dataName, std::vector<double>& data);
+
+    //runs through a tranmission loop
     void Transmit(std::vector<String>& dataName, std::vector<double>& data);
+
+    //reads and returns data from the LoRa
     String ReadLoRa();
+
+    //runs through the recieving routine
     String DataTransmitting::onReceive(int packetSize);
 
     DataTransmitting();
