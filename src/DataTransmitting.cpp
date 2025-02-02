@@ -60,22 +60,12 @@ String DataTransmitting::ReadLoRa()
 
 void DataTransmitting::SendPacket(uint8_t start_byte, std::vector<String> dataName, std::vector<double> data)
 {
-    if (dataName.size() < data.size())
+    if (dataName.size() != data.size())
     {
-        
-        for (uint8_t i = 0; i < data.size() - i; i++)
-        {
-            dataName.push_back("null");
-        }
-        
-    }
-    if (data.size() < dataName.size())
-    {
-        for (uint8_t i = 0; i < dataName.size() - i; i++)
-        {
-            dataName.push_back(0);
-        }
-        
+        dataName.clear();
+        data.clear();
+        dataName.push_back("error");
+        data.push_back(0);        
     }
 
     uint32_t checksum = CalculateChecksum(data);
@@ -84,6 +74,7 @@ void DataTransmitting::SendPacket(uint8_t start_byte, std::vector<String> dataNa
     Serial.print(data.size());
     Serial.print(",");
 
+    //start lora packet 
     LoRa.beginPacket();
     LoRa.print(start_byte);
     LoRa.print(",");
@@ -91,10 +82,6 @@ void DataTransmitting::SendPacket(uint8_t start_byte, std::vector<String> dataNa
     LoRa.print(",");
     for (uint8_t i = 0; i < data.size(); i++)
     {
-        Serial.print(dataName[i]);
-        Serial.print(",");
-        Serial.print(data[i]);
-        Serial.print(",");
         LoRa.print(dataName[i]);
         LoRa.print(",");
         LoRa.print(data[i]);
@@ -104,7 +91,15 @@ void DataTransmitting::SendPacket(uint8_t start_byte, std::vector<String> dataNa
     LoRa.print(checksum);
     LoRa.print(",");
     LoRa.endPacket();
-
+    //end lora packet
+    //only info relavent to the lora transmission should go between the start and end of the packet to ensure that its as fast as possible
+    for (uint8_t i = 0; i < data.size(); i++)
+    {
+        Serial.print(dataName[i]);
+        Serial.print(",");
+        Serial.print(data[i]);
+        Serial.print(",");
+    }
     Serial.print("CKS,");
     Serial.print(checksum); Serial.println(",");
 }

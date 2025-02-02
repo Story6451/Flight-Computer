@@ -43,7 +43,7 @@ void loop()
   dataToSend.push_back(mX);
   dataToSend.push_back(mY);
   dataToSend.push_back(mZ);
-  dataNameToSend.push_back("accelXValue");// = {"accelXValue", "accelYValue", "accelZValue"};
+  dataNameToSend.push_back("accelXValue");
   dataNameToSend.push_back("accelYValue");
   dataNameToSend.push_back("accelZValue");
   dataNameToSend.push_back("magnetometerXValue");
