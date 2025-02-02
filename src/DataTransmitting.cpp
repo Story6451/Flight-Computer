@@ -3,14 +3,15 @@
 #include "LoRa-SOLDERED.h"
 
 
-String DataTransmitting::onReceive(int packetSize)
+String DataTransmitting::OnReceive(int packetSize)
 {
     String message = "";
-    if (packetSize)
+    if (packetSize != 0)
     {
         
         while(LoRa.available())
         {
+            //Serial.print((char)LoRa.read());
             message += (char)LoRa.read();
         }
         
@@ -30,7 +31,7 @@ void DataTransmitting::Transmit(std::vector<String> dataName, std::vector<double
     
     if ((millis() - lastTimeSent) > sendingInterval)
     {
-    
+        //Serial.println(millis() - lastTimeSent);
         SendPacket(0xAA, dataName, data);
         
         lastTimeSent = millis();
@@ -39,7 +40,7 @@ void DataTransmitting::Transmit(std::vector<String> dataName, std::vector<double
 
 String DataTransmitting::ReadLoRa()
 {
-    return onReceive(LoRa.parsePacket());
+    return OnReceive(LoRa.parsePacket());
 }
 
 void DataTransmitting::SendPacket(uint8_t start_byte, std::vector<String> dataName, std::vector<double> data)
@@ -53,10 +54,6 @@ void DataTransmitting::SendPacket(uint8_t start_byte, std::vector<String> dataNa
     }
 
     uint32_t checksum = CalculateChecksum(data);
-    Serial.print(start_byte);
-    Serial.print(",");
-    Serial.print(data.size());
-    Serial.print(",");
 
     //start lora packet 
     LoRa.beginPacket();
@@ -77,15 +74,19 @@ void DataTransmitting::SendPacket(uint8_t start_byte, std::vector<String> dataNa
     LoRa.endPacket();
     //end lora packet
     //only info relavent to the lora transmission should go between the start and end of the packet to ensure that its as fast as possible
-    for (uint8_t i = 0; i < data.size(); i++)
-    {
-        Serial.print(dataName[i]);
-        Serial.print(",");
-        Serial.print(data[i]);
-        Serial.print(",");
-    }
-    Serial.print("CKS,");
-    Serial.print(checksum); Serial.println(",");
+    // Serial.print(start_byte);
+    // Serial.print(",");
+    // Serial.print(data.size());
+    // Serial.print(",");
+    // for (uint8_t i = 0; i < data.size(); i++)
+    // {
+    //     Serial.print(dataName[i]);
+    //     Serial.print(",");
+    //     Serial.print(data[i]);
+    //     Serial.print(",");
+    // }
+    //Serial.print("CKS,");
+    //Serial.print(checksum); Serial.println(",");
 }
 uint32_t DataTransmitting::CalculateChecksum(std::vector<double> data){
     uint32_t checksum = 0;

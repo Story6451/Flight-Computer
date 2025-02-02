@@ -33,7 +33,7 @@ public:
     String ReadLoRa();
 
     //runs through the recieving routine
-    String DataTransmitting::onReceive(int packetSize);
+    String DataTransmitting::OnReceive(int packetSize);
 
     DataTransmitting();
 };

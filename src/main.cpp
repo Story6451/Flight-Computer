@@ -37,7 +37,7 @@ void loop()
   float mX = dataReader.ReturnMagnetometerX();
   float mY = dataReader.ReturnMagnetometerY();
   float mZ = dataReader.ReturnMagnetometerZ();
-  //dataToSend.push_back(aX);
+  dataToSend.push_back(aX);
   dataToSend.push_back(aY);
   dataToSend.push_back(aZ);
   dataToSend.push_back(mX);
@@ -104,5 +104,6 @@ void loop()
   Serial.print("Number of Satellites: "); Serial.print(dataReader.ReturnSatellitesConnected()); Serial.println(" ");
 
   */
+  
   Serial.println(dataTransmitter.ReadLoRa());
 }
