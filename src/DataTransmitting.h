@@ -35,7 +35,7 @@ public:
     String ReadLoRa();
 
     //runs through the recieving routine
-    void DataTransmitting::OnReceive(int packetSize);
+    void OnReceive(int packetSize);
 
     DataTransmitting();
 };
