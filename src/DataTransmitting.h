@@ -12,6 +12,8 @@ private:
 
     uint16_t sendingInterval = 2000;    //change this based on your error micro controller setup
     uint64_t lastTimeSent = 0;
+
+    String message = "";
     
 public:
     // Initialising the LoRa
@@ -33,7 +35,7 @@ public:
     String ReadLoRa();
 
     //runs through the recieving routine
-    String DataTransmitting::OnReceive(int packetSize);
+    void DataTransmitting::OnReceive(int packetSize);
 
     DataTransmitting();
 };

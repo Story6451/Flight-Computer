@@ -3,7 +3,7 @@
 #include "LoRa-SOLDERED.h"
 
 
-String DataTransmitting::OnReceive(int packetSize)
+void DataTransmitting::OnReceive(int packetSize)
 {
     String message = "";
     if (packetSize != 0)
@@ -16,7 +16,7 @@ String DataTransmitting::OnReceive(int packetSize)
         }
         
     }
-    return message;
+    
 }
 void DataTransmitting::Begin()
 {
@@ -24,6 +24,7 @@ void DataTransmitting::Begin()
     LoRa.setPins(CS_PIN, RESET_PIN, IRQ_PIN);// set CS, reset, IRQ pin
     LoRa.begin(FREQUENCY);// Initialize LoRa at 433 MHz
 
+    LoRa.onReceive(OnReceive);
 }
 
 void DataTransmitting::Transmit(std::vector<String> dataName, std::vector<double> data)
@@ -40,7 +41,7 @@ void DataTransmitting::Transmit(std::vector<String> dataName, std::vector<double
 
 String DataTransmitting::ReadLoRa()
 {
-    return OnReceive(LoRa.parsePacket());
+    return message;//OnReceive(LoRa.parsePacket());
 }
 
 void DataTransmitting::SendPacket(uint8_t start_byte, std::vector<String> dataName, std::vector<double> data)
