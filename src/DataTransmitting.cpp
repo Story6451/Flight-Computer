@@ -5,7 +5,7 @@
 
 void DataTransmitting::OnReceive(int packetSize)
 {
-    String message = "";
+    //String message = "";
     if (packetSize != 0)
     {
         
