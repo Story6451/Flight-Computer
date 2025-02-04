@@ -6,12 +6,35 @@
 #include <kalman.h>
 #include <vector>
 #include <cstdint>
+#define LORA		//Specify that module will be used for LoRa to LoRa communication
+#include "LoRa-SOLDERED.h"
 
 DataLogging dataLogger;
 DataReading dataReader;
 DataTransmitting dataTransmitter;
 
 EKF ekf;
+String message = "";
+
+void OnRecive(int packetSize)
+{
+    message = "";
+    if (packetSize != 0)
+    {
+        
+        while(LoRa.available())
+        {
+            //Serial.print((char)LoRa.read());
+            message += (char)LoRa.read();
+        }
+        
+    }
+}
+
+const uint8_t CS_PIN = 37;          // LoRa radio chip select
+const uint8_t RESET_PIN = 41;       // LoRa radio reset
+const uint8_t IRQ_PIN = 2;         // Change for your board; must be a hardware interrupt pin
+const uint64_t FREQUENCY = 433E6;
 
 void setup() 
 {
@@ -21,7 +44,13 @@ void setup()
   //dataReader.Begin();
   dataTransmitter.Begin();
   //ekf.initkalman();
+  LoRa.setPins(CS_PIN, RESET_PIN, IRQ_PIN);// set CS, reset, IRQ pin
+  LoRa.begin(FREQUENCY);// Initialize LoRa at 433 MHz
+  LoRa.onReceive(OnRecive);
+  
+  //attachInterrupt(digitalPinToInterrupt(2), OnRecive, RISING);
 }
+
 
 void loop() 
 {
@@ -105,5 +134,5 @@ void loop()
 
   */
   
-  Serial.println(dataTransmitter.ReadLoRa());
+  Serial.println(message);
 }

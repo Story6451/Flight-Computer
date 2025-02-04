@@ -3,26 +3,28 @@
 #include "LoRa-SOLDERED.h"
 
 
-void DataTransmitting::OnReceive(int packetSize)
-{
-    //String message = "";
-    if (packetSize != 0)
-    {
+// void DataTransmitting::OnReceive(int packetSize)
+// {
+//     // message = "";
+//     // if (packetSize != 0)
+//     // {
         
-        while(LoRa.available())
-        {
-            //Serial.print((char)LoRa.read());
-            message += (char)LoRa.read();
-        }
+//     //     while(LoRa.available())
+//     //     {
+//     //         //Serial.print((char)LoRa.read());
+//     //         message += (char)LoRa.read();
+//     //     }
         
-    }
+//     // }
     
-}
+// }
 void DataTransmitting::Begin()
 {
     Serial.println("Initialising Lora");
     LoRa.setPins(CS_PIN, RESET_PIN, IRQ_PIN);// set CS, reset, IRQ pin
     LoRa.begin(FREQUENCY);// Initialize LoRa at 433 MHz
+
+    
 }
 
 void DataTransmitting::Transmit(std::vector<String> dataName, std::vector<double> data)
@@ -35,15 +37,15 @@ void DataTransmitting::Transmit(std::vector<String> dataName, std::vector<double
         
         lastTimeSent = millis();
         sending = false;
-    }
-    if (!sending)
-    {
-        OnReceive(LoRa.parsePacket());
+        LoRa.receive();
     }
 }
 
 String DataTransmitting::ReadLoRa()
 {
+    OnReceive(LoRa.parsePacket());
+
+    
     return message;//OnReceive(LoRa.parsePacket());
 }
 

@@ -14,9 +14,9 @@ private:
     uint64_t lastTimeSent = 0;
     bool sending = false;
 
-    String message = "";
     
 public:
+    static String message;
     // Initialising the LoRa
     void Begin();
 
