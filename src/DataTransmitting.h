@@ -12,6 +12,7 @@ private:
 
     uint16_t sendingInterval = 2000;    //change this based on your error micro controller setup
     uint64_t lastTimeSent = 0;
+    bool sending = false;
 
     String message = "";
     

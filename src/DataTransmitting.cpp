@@ -34,6 +34,11 @@ void DataTransmitting::Transmit(std::vector<String> dataName, std::vector<double
         SendPacket(0xAA, dataName, data);
         
         lastTimeSent = millis();
+        sending = false;
+    }
+    if (!sending)
+    {
+        OnReceive(LoRa.parsePacket());
     }
 }
 
@@ -44,6 +49,7 @@ String DataTransmitting::ReadLoRa()
 
 void DataTransmitting::SendPacket(uint8_t start_byte, std::vector<String> dataName, std::vector<double> data)
 {
+    sending = true;
     if (dataName.size() != data.size())
     {
         dataName.clear();
