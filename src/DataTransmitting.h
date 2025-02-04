@@ -10,7 +10,7 @@ private:
     const uint8_t IRQ_PIN = 2;         // Change for your board; must be a hardware interrupt pin
     const uint64_t FREQUENCY = 433E6;
 
-    uint16_t sendingInterval = 2000;    //change this based on your error micro controller setup
+    uint16_t sendingInterval = 500;    //change this based on your error micro controller setup
     uint64_t lastTimeSent = 0;
     bool sending = false;
 
