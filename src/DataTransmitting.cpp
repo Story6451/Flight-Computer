@@ -23,8 +23,6 @@ void DataTransmitting::Begin()
     Serial.println("Initialising Lora");
     LoRa.setPins(CS_PIN, RESET_PIN, IRQ_PIN);// set CS, reset, IRQ pin
     LoRa.begin(FREQUENCY);// Initialize LoRa at 433 MHz
-
-    LoRa.onReceive(OnReceive);
 }
 
 void DataTransmitting::Transmit(std::vector<String> dataName, std::vector<double> data)
