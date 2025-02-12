@@ -27,7 +27,7 @@ void DataTransmitting::Begin()
     
 }
 
-void DataTransmitting::Transmit(std::vector<String> dataName, std::vector<double> data)
+void DataTransmitting::Transmit(std::vector<int8_t> dataName, std::vector<double> data)
 {
     
     if ((millis() - lastTimeSent) > sendingInterval)
@@ -49,14 +49,14 @@ String DataTransmitting::ReadLoRa()
     return message;//OnReceive(LoRa.parsePacket());
 }
 
-void DataTransmitting::SendPacket(uint8_t start_byte, std::vector<String> dataName, std::vector<double> data)
+void DataTransmitting::SendPacket(uint8_t start_byte, std::vector<int8_t> dataName, std::vector<double> data)
 {
     sending = true;
     if (dataName.size() != data.size())
     {
         dataName.clear();
         data.clear();
-        dataName.push_back("error");
+        dataName.push_back(-1);
         data.push_back(0);        
     }
 
@@ -99,7 +99,6 @@ uint32_t DataTransmitting::CalculateChecksum(std::vector<double> data){
     uint32_t checksum = 0;
     for (uint8_t i=0; i<data.size(); i++){
         checksum += (uint32_t)(abs(data[i]*100));
-        
     }
     return checksum;
 }

@@ -27,10 +27,10 @@ public:
     uint32_t CalculateChecksum(std::vector<double> data);
 
     //sends the packet
-    void SendPacket(uint8_t start_byte, std::vector<String> dataName, std::vector<double> data);
+    void SendPacket(uint8_t start_byte, std::vector<int8_t> dataName, std::vector<double> data);
 
     //runs through a tranmission loop
-    void Transmit(std::vector<String> dataName, std::vector<double> data);
+    void Transmit(std::vector<int8_t> dataName, std::vector<double> data);
 
     //reads and returns data from the LoRa
     String ReadLoRa();

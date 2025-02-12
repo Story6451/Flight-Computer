@@ -13,22 +13,30 @@ DataLogging dataLogger;
 DataReading dataReader;
 DataTransmitting dataTransmitter;
 
+enum DataKeys{
+  Accel_X,
+  Accel_Y,
+  Accel_Z,
+  Magnetometer_X,
+  Magnetometer_Y,
+  Magnetometer_Z,
+  CheckSum,
+};
+
 EKF ekf;
 String message = "";
 
 void OnRecive(int packetSize)
 {
-    message = "";
-    if (packetSize != 0)
+  message = "";
+  if (packetSize != 0)
+  { 
+    while(LoRa.available())
     {
-        
-        while(LoRa.available())
-        {
-            //Serial.print((char)LoRa.read());
-            message += (char)LoRa.read();
-        }
-        
+        //Serial.print((char)LoRa.read());
+        message += (char)LoRa.read();
     }
+  }
 }
 
 const uint8_t CS_PIN = 37;          // LoRa radio chip select
@@ -54,7 +62,7 @@ void setup()
 
 void loop() 
 {
-  std::vector<String> dataNameToSend;
+  std::vector<int8_t> dataNameToSend;
   std::vector<double> dataToSend;
   
   //Accelerometer
@@ -66,18 +74,24 @@ void loop()
   float mX = dataReader.ReturnMagnetometerX();
   float mY = dataReader.ReturnMagnetometerY();
   float mZ = dataReader.ReturnMagnetometerZ();
+  
+  dataNameToSend.push_back(DataKeys::Accel_X);
   dataToSend.push_back(aX);
+
+  dataNameToSend.push_back(DataKeys::Accel_Y);
   dataToSend.push_back(aY);
+
+  dataNameToSend.push_back(DataKeys::Accel_Z);
   dataToSend.push_back(aZ);
+
+  dataNameToSend.push_back(DataKeys::Magnetometer_X);
   dataToSend.push_back(mX);
+
+  dataNameToSend.push_back(DataKeys::Magnetometer_Y);
   dataToSend.push_back(mY);
+
+  dataNameToSend.push_back(DataKeys::Magnetometer_Z);
   dataToSend.push_back(mZ);
-  dataNameToSend.push_back("accelXValue");
-  dataNameToSend.push_back("accelYValue");
-  dataNameToSend.push_back("accelZValue");
-  dataNameToSend.push_back("magnetometerXValue");
-  dataNameToSend.push_back("magnetometerYValue");
-  dataNameToSend.push_back("magnetometerZValue");
   //Serial.println(aX);
   dataTransmitter.Transmit(dataNameToSend, dataToSend);
   // Serial.print("Accel X: ");
