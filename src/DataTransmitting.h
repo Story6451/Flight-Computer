@@ -14,11 +14,11 @@ private:
     uint64_t lastTimeSent = 0;
     bool sending = false;
 
+    String message = "";
     
 public:
-    static String message;
     // Initialising the LoRa
-    void Begin();
+    void Begin(void (*onrecieve)(int));
 
     // creating the packet and adds the start byte to it
     std::vector<uint8_t> CreatePacket(uint8_t start_byte);
@@ -32,11 +32,13 @@ public:
     //runs through a tranmission loop
     void Transmit(std::vector<int8_t> dataName, std::vector<double> data);
 
+    void testFunc2(int y);
+
     //reads and returns data from the LoRa
     String ReadLoRa();
 
     //runs through the recieving routine
-    void OnReceive(int packetSize);
+    void OnRecieve(int packetSize);
 
     DataTransmitting();
 };

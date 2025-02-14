@@ -18,13 +18,24 @@
 //     // }
     
 // }
-void DataTransmitting::Begin()
+void DataTransmitting::Begin(void (*onrecieve)(int))
 {
     Serial.println("Initialising Lora");
     LoRa.setPins(CS_PIN, RESET_PIN, IRQ_PIN);// set CS, reset, IRQ pin
     LoRa.begin(FREQUENCY);// Initialize LoRa at 433 MHz
+}
 
-    
+void DataTransmitting::OnRecieve(int packetSize)
+{
+  message = "";
+  if (packetSize != 0)
+  { 
+    while(LoRa.available())
+    {
+        //Serial.print((char)LoRa.read());
+        message += (char)LoRa.read();
+    }
+  }
 }
 
 void DataTransmitting::Transmit(std::vector<int8_t> dataName, std::vector<double> data)
@@ -32,7 +43,7 @@ void DataTransmitting::Transmit(std::vector<int8_t> dataName, std::vector<double
     
     if ((millis() - lastTimeSent) > sendingInterval)
     {
-        //Serial.println(millis() - lastTimeSent);
+        Serial.println(millis() - lastTimeSent);
         SendPacket(0xAA, dataName, data);
         
         lastTimeSent = millis();
@@ -43,9 +54,6 @@ void DataTransmitting::Transmit(std::vector<int8_t> dataName, std::vector<double
 
 String DataTransmitting::ReadLoRa()
 {
-    OnReceive(LoRa.parsePacket());
-
-    
     return message;//OnReceive(LoRa.parsePacket());
 }
 
@@ -77,7 +85,6 @@ void DataTransmitting::SendPacket(uint8_t start_byte, std::vector<int8_t> dataNa
     }
     LoRa.print("CKS,");
     LoRa.print(checksum);
-    LoRa.print(",");
     LoRa.endPacket();
     //end lora packet
     //only info relavent to the lora transmission should go between the start and end of the packet to ensure that its as fast as possible

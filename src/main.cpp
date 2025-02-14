@@ -6,8 +6,8 @@
 #include <kalman.h>
 #include <vector>
 #include <cstdint>
-#define LORA		//Specify that module will be used for LoRa to LoRa communication
-#include "LoRa-SOLDERED.h"
+//#define LORA		//Specify that module will be used for LoRa to LoRa communication
+//#include "LoRa-SOLDERED.h"
 
 DataLogging dataLogger;
 DataReading dataReader;
@@ -24,38 +24,19 @@ enum DataKeys{
 };
 
 EKF ekf;
-String message = "";
-
-void OnRecive(int packetSize)
-{
-  message = "";
-  if (packetSize != 0)
-  { 
-    while(LoRa.available())
-    {
-        //Serial.print((char)LoRa.read());
-        message += (char)LoRa.read();
-    }
-  }
-}
-
-const uint8_t CS_PIN = 37;          // LoRa radio chip select
-const uint8_t RESET_PIN = 41;       // LoRa radio reset
-const uint8_t IRQ_PIN = 2;         // Change for your board; must be a hardware interrupt pin
-const uint64_t FREQUENCY = 433E6;
 
 void setup() 
 {
   Serial.begin(9600);
+  Serial.println("Setting Up");
   //Wire.begin();
   //dataLogger.Begin();
   //dataReader.Begin();
-  dataTransmitter.Begin();
+  std::function<void(int)> onrecieve = bind(&DataTransmitting::OnRecieve, &dataTransmitter, std::placeholders::_1);
+  auto fonrecieve = onrecieve.target<void(*)(int)>();
+  void (*phonrecieve)(int) = *fonrecieve;
+  dataTransmitter.Begin(phonrecieve);
   //ekf.initkalman();
-  LoRa.setPins(CS_PIN, RESET_PIN, IRQ_PIN);// set CS, reset, IRQ pin
-  LoRa.begin(FREQUENCY);// Initialize LoRa at 433 MHz
-  LoRa.onReceive(OnRecive);
-  
   //attachInterrupt(digitalPinToInterrupt(2), OnRecive, RISING);
 }
 
@@ -65,6 +46,7 @@ void loop()
   std::vector<int8_t> dataNameToSend;
   std::vector<double> dataToSend;
   
+  Serial.println("Looping");
   //Accelerometer
   dataReader.ReadAccelerometer();
   dataReader.ReadMagnetometer();
@@ -147,6 +129,4 @@ void loop()
   Serial.print("Number of Satellites: "); Serial.print(dataReader.ReturnSatellitesConnected()); Serial.println(" ");
 
   */
-  
-  Serial.println(message);
 }
