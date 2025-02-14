@@ -20,10 +20,61 @@ enum DataKeys{
   Magnetometer_X,
   Magnetometer_Y,
   Magnetometer_Z,
+  Latitude,
+  Longitude,
+  Pressure,
+  Velocity,
   CheckSum,
 };
 
+// commands the flight computer can execute
+bool launched = false;
+bool openedValve = false;
+bool firedPyro = false;
+
 EKF ekf;
+String message = "";
+
+void checkRecieved(String message)
+{
+  if ((message == "OpenValves") && (!openedValve))
+  {
+    // open valves
+    Serial.println("Opened Valves");
+  }
+  if ((message == "FirePyro") && (!firedPyro))
+  {
+    Serial.println("Fired Pyro");
+  }
+  if ((message == "Launch") && (!launched))
+  {
+    Serial.println("Launnching");
+  }
+  else
+  {
+    Serial.println("Not A Valid Command");
+  }
+}
+
+void OnRecive(int packetSize)
+{
+  message = "";
+  if (packetSize != 0)
+  { 
+    while(LoRa.available())
+    {
+        //Serial.print((char)LoRa.read());
+        message += (char)LoRa.read();
+    }
+  }
+  Serial.print("reading: ");Serial.println(message);
+  checkRecieved(message);
+}
+
+const uint8_t CS_PIN = 37;          // LoRa radio chip select
+const uint8_t RESET_PIN = 41;       // LoRa radio reset
+const uint8_t IRQ_PIN = 2;         // Change for your board; must be a hardware interrupt pin
+const uint64_t FREQUENCY = 433E6;
 
 void setup() 
 {
@@ -43,6 +94,7 @@ void setup()
 
 void loop() 
 {
+  //Serial.println("looping");
   std::vector<int8_t> dataNameToSend;
   std::vector<double> dataToSend;
   
@@ -56,6 +108,8 @@ void loop()
   float mX = dataReader.ReturnMagnetometerX();
   float mY = dataReader.ReturnMagnetometerY();
   float mZ = dataReader.ReturnMagnetometerZ();
+  float latitude = rand()%360;
+  float longitude = rand()%360;
   
   dataNameToSend.push_back(DataKeys::Accel_X);
   dataToSend.push_back(aX);
@@ -74,6 +128,12 @@ void loop()
 
   dataNameToSend.push_back(DataKeys::Magnetometer_Z);
   dataToSend.push_back(mZ);
+
+  dataNameToSend.push_back(DataKeys::Latitude);
+  dataToSend.push_back(latitude);
+
+  dataNameToSend.push_back(DataKeys::Longitude);
+  dataToSend.push_back(longitude);
   //Serial.println(aX);
   dataTransmitter.Transmit(dataNameToSend, dataToSend);
   // Serial.print("Accel X: ");
