@@ -35,6 +35,9 @@ public:
     //reads and returns data from the LoRa
     String ReadLoRa();
 
+    // checks what the command the message is
+    void checkRecieved(String);
+
     //runs through the recieving routine
     void OnReceive(int packetSize);
 

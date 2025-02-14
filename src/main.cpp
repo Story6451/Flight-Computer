@@ -27,8 +27,34 @@ enum DataKeys{
   CheckSum,
 };
 
+// commands the flight computer can execute
+bool launched = false;
+bool openedValve = false;
+bool firedPyro = false;
+
 EKF ekf;
 String message = "";
+
+void checkRecieved(String message)
+{
+  if ((message == "OpenValves") && (!openedValve))
+  {
+    // open valves
+    Serial.println("Opened Valves");
+  }
+  if ((message == "FirePyro") && (!firedPyro))
+  {
+    Serial.println("Fired Pyro");
+  }
+  if ((message == "Launch") && (!launched))
+  {
+    Serial.println("Launnching");
+  }
+  else
+  {
+    Serial.println("Not A Valid Command");
+  }
+}
 
 void OnRecive(int packetSize)
 {
@@ -41,7 +67,8 @@ void OnRecive(int packetSize)
         message += (char)LoRa.read();
     }
   }
-  Serial.println(message);
+  Serial.print("reading: ");Serial.println(message);
+  checkRecieved(message);
 }
 
 const uint8_t CS_PIN = 37;          // LoRa radio chip select
