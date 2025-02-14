@@ -20,6 +20,10 @@ enum DataKeys{
   Magnetometer_X,
   Magnetometer_Y,
   Magnetometer_Z,
+  Latitude,
+  Longitude,
+  Pressure,
+  Velocity,
   CheckSum,
 };
 
@@ -37,6 +41,7 @@ void OnRecive(int packetSize)
         message += (char)LoRa.read();
     }
   }
+  Serial.println(message);
 }
 
 const uint8_t CS_PIN = 37;          // LoRa radio chip select
@@ -62,6 +67,7 @@ void setup()
 
 void loop() 
 {
+  //Serial.println("looping");
   std::vector<int8_t> dataNameToSend;
   std::vector<double> dataToSend;
   
@@ -74,6 +80,8 @@ void loop()
   float mX = dataReader.ReturnMagnetometerX();
   float mY = dataReader.ReturnMagnetometerY();
   float mZ = dataReader.ReturnMagnetometerZ();
+  float latitude = rand()%360;
+  float longitude = rand()%360;
   
   dataNameToSend.push_back(DataKeys::Accel_X);
   dataToSend.push_back(aX);
@@ -92,6 +100,12 @@ void loop()
 
   dataNameToSend.push_back(DataKeys::Magnetometer_Z);
   dataToSend.push_back(mZ);
+
+  dataNameToSend.push_back(DataKeys::Latitude);
+  dataToSend.push_back(latitude);
+
+  dataNameToSend.push_back(DataKeys::Longitude);
+  dataToSend.push_back(longitude);
   //Serial.println(aX);
   dataTransmitter.Transmit(dataNameToSend, dataToSend);
   // Serial.print("Accel X: ");
